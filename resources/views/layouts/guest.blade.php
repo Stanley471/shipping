@@ -7,7 +7,6 @@
     <title>@yield('title', config('app.name', 'Laravel'))</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-        // Dark mode detection
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')
         } else {
@@ -15,13 +14,12 @@
         }
     </script>
 </head>
-<body class="font-sans text-gray-900 antialiased bg-gray-50 dark:bg-gray-900">
+<body class="font-sans text-gray-900 antialiased">
     
-    <!-- Navigation -->
-    <nav class="fixed w-full z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+    <!-- Mobile Navigation -->
+    <nav class="fixed w-full z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 lg:hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
                 <a href="/" class="flex items-center gap-2">
                     <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,178 +28,92 @@
                     </div>
                     <span class="text-xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
                 </a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Home</a>
-                    <a href="{{ route('tracking.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Track</a>
-                    <a href="/#features" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Features</a>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('login') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600">Login</a>
                 </div>
-
-                <!-- Desktop Auth Buttons -->
-                <div class="hidden md:flex items-center gap-4">
-                    @if (Route::currentRouteName() == 'login')
-                        <a href="{{ route('register') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Create Account</a>
-                    @elseif (Route::currentRouteName() == 'register')
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">Log in</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">Log in</a>
-                        <a href="{{ route('register') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get Started</a>
-                    @endif
-                </div>
-
-                <!-- Mobile Hamburger Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="toggleMobileMenu()">
-                    <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                    <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Sidebar Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-50 hidden">
-        <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="toggleMobileMenu()"></div>
+    <!-- Split Screen Layout -->
+    <div class="min-h-screen flex">
         
-        <!-- Sidebar -->
-        <div class="absolute right-0 top-0 h-full w-80 max-w-full bg-white dark:bg-gray-800 shadow-2xl transform transition-transform translate-x-full" id="sidebar">
-            <div class="flex flex-col h-full">
-                <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                    <a href="/" class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                        </div>
-                        <span class="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
-                    </a>
-                    <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <!-- Left Side - Form -->
+        <div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-4 sm:px-8 lg:px-16 py-12 pt-20 lg:pt-12 bg-gray-50 dark:bg-gray-900">
+            
+            <!-- Desktop Logo -->
+            <div class="hidden lg:block mb-8 self-start">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
-                    </button>
-                </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
+                </a>
+            </div>
 
-                <!-- Navigation Links -->
-                <div class="flex-1 overflow-y-auto py-4">
-                    <div class="px-4 space-y-1">
-                        <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                            </svg>
-                            Home
-                        </a>
-                        <a href="{{ route('tracking.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                            Track Shipment
-                        </a>
-                        <a href="/#features" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                            </svg>
-                            Features
-                        </a>
-                        <a href="/#how-it-works" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                            </svg>
-                            How It Works
-                        </a>
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            Help Center
-                        </a>
+            <!-- Form Container -->
+            <div class="w-full max-w-md">
+                {{ $slot }}
+            </div>
+
+            <!-- Footer Links -->
+            <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                <a href="/" class="hover:text-emerald-600 transition-colors">← Back to home</a>
+            </div>
+        </div>
+
+        <!-- Right Side - Logistics Image (Desktop Only) -->
+        <div class="hidden lg:flex lg:w-1/2 relative bg-gray-100 dark:bg-gray-800 overflow-hidden">
+            <!-- Background Image with Overlay -->
+            <div class="absolute inset-0">
+                <img 
+                    src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1200&h=800&fit=crop" 
+                    alt="Cargo ship and logistics"
+                    class="w-full h-full object-cover"
+                >
+                <div class="absolute inset-0 bg-gradient-to-r from-gray-900/60 to-gray-900/30"></div>
+            </div>
+
+            <!-- Content Overlay -->
+            <div class="relative z-10 flex flex-col justify-center h-full px-12 text-white">
+                <div class="max-w-md">
+                    <h2 class="text-4xl font-bold mb-4">Global Logistics Solutions</h2>
+                    <p class="text-lg text-gray-200 mb-8">Track your shipments across air, sea, and land with real-time updates and complete transparency.</p>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div>
+                            <div class="text-3xl font-bold text-emerald-400">50K+</div>
+                            <div class="text-sm text-gray-300">Shipments</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-emerald-400">120+</div>
+                            <div class="text-sm text-gray-300">Countries</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-emerald-400">99%</div>
+                            <div class="text-sm text-gray-300">On Time</div>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="flex items-center gap-4">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-xs font-bold">JD</div>
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">MK</div>
+                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-xs font-bold">+5k</div>
+                        </div>
+                        <span class="text-sm text-gray-300">Trusted by 5,000+ businesses</span>
                     </div>
                 </div>
-
-                <!-- Bottom Auth Buttons -->
-                <div class="p-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
-                    @if (Route::currentRouteName() == 'login')
-                        <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                            </svg>
-                            Create Account
-                        </a>
-                    @elseif (Route::currentRouteName() == 'register')
-                        <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                            </svg>
-                            Log in
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                            </svg>
-                            Log in
-                        </a>
-                        <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                            </svg>
-                            Get Started
-                        </a>
-                    @endif
-                </div>
             </div>
+
+            <!-- Decorative Elements -->
+            <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-20 sm:pt-0 px-4 py-8">
-        {{ $slot }}
-    </div>
-
-    <!-- Mobile Menu JavaScript -->
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const sidebar = document.getElementById('sidebar');
-            const menuIcon = document.getElementById('menu-icon');
-            const closeIcon = document.getElementById('close-icon');
-            
-            if (menu.classList.contains('hidden')) {
-                // Open menu
-                menu.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    sidebar.classList.remove('translate-x-full');
-                }, 10);
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-            } else {
-                // Close menu
-                sidebar.classList.add('translate-x-full');
-                setTimeout(() => {
-                    menu.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 300);
-                menuIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            }
-        }
-
-        // Close menu on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const menu = document.getElementById('mobile-menu');
-                if (!menu.classList.contains('hidden')) {
-                    toggleMobileMenu();
-                }
-            }
-        });
-    </script>
 </body>
 </html>
