@@ -8,6 +8,11 @@
                     <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
+                    @if(auth()->user()->role === 'admin')
+    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+        Admin
+    </x-nav-link>
+@endif
                 </div>
 
                 <!-- Navigation Links -->
