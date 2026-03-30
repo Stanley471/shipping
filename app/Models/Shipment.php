@@ -21,10 +21,13 @@ class Shipment extends Model
         'pickup_location',
         'delivery_address',
         'shipped_at',
+        'shipment_type',
+        'eta',
     ];
 
     protected $casts = [
         'shipped_at' => 'datetime',
+        'eta' => 'datetime',
     ];
 
     public function user(): BelongsTo
