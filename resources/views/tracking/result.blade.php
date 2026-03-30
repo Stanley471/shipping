@@ -1,107 +1,237 @@
-<x-guest-layout>
-    <div class="min-h-screen bg-gray-100 py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            
-            <div class="text-center mb-8">
-                <a href="{{ route('tracking.index') }}" class="text-blue-600 hover:underline">&larr; Track another shipment</a>
-            </div>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $shipment->tracking_id }} | Tracking Result</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="antialiased bg-gray-50 dark:bg-gray-900">
+    
+    @php
+        $latestUpdate = $shipment->trackingUpdates->first();
+        $progress = $latestUpdate?->progress ?? 0;
+        $status = $latestUpdate?->status ?? 'pending';
+    @endphp
 
-            @php
-                $latestUpdate = $shipment->trackingUpdates->first();
-            @endphp
-
-            <!-- Shipment Info -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="text-center mb-6">
-                    <p class="text-sm text-gray-500">Tracking ID</p>
-                    <p class="text-3xl font-mono font-bold">{{ $shipment->tracking_id }}</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500">Shipping From</p>
-                        <p class="font-medium">{{ $shipment->sender_name }}</p>
-                        <p class="text-sm text-gray-600">{{ $shipment->pickup_location }}</p>
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Destination</p>
-                        <p class="font-medium">{{ $shipment->receiver_name }}</p>
-                        <p class="text-sm text-gray-600">{{ $shipment->delivery_address }}</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div>
-                        <p class="text-sm text-gray-500">Shipped At</p>
-                        <p class="font-medium">{{ $shipment->shipped_at->format('M d, Y') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">ETA</p>
-                        <p class="font-medium">{{ $shipment->eta?->format('M d, Y') ?? 'N/A' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Type</p>
-                        <p class="font-medium capitalize">{{ str_replace('_', ' ', $shipment->shipment_type) }}</p>
-                    </div>
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('tracking.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm">Track Another</a>
+                    <a href="{{ route('login') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">Login</a>
                 </div>
             </div>
-
-            <!-- Current Status & Progress -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="font-semibold text-lg mb-4 text-center">Current Status</h3>
-                
-                @if($latestUpdate)
-                    <p class="text-2xl text-center capitalize mb-4">{{ str_replace('_', ' ', $latestUpdate->status) }}</p>
-                    
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
-                            <span>{{ $latestUpdate->progress }}%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="bg-green-600 h-4 rounded-full transition-all duration-500" style="width: {{ $latestUpdate->progress }}%"></div>
-                        </div>
-                    </div>
-
-                    <div class="text-center space-y-1">
-                        @if($latestUpdate->location)
-                            <p class="text-gray-600"><strong>Current Location:</strong> {{ $latestUpdate->location }}</p>
-                        @endif
-                        @if($latestUpdate->note)
-                            <p class="text-gray-600"><strong>Note:</strong> {{ $latestUpdate->note }}</p>
-                        @endif
-                        <p class="text-sm text-gray-400">Updated {{ $latestUpdate->occurred_at->format('M d, Y H:i') }}</p>
-                    </div>
-                @else
-                    <p class="text-center text-gray-500">No status updates available yet.</p>
-                @endif
-            </div>
-
-            <!-- Timeline -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="font-semibold text-lg mb-4">Delivery Timeline</h3>
-                
-                @if($shipment->trackingUpdates->count())
-                    <div class="relative border-l-2 border-gray-200 ml-3 space-y-8">
-                        @foreach($shipment->trackingUpdates as $update)
-                            <div class="relative ml-6">
-                                <span class="absolute -left-[31px] top-1 w-4 h-4 bg-blue-600 rounded-full border-2 border-white"></span>
-                                <p class="text-sm text-gray-500">{{ $update->occurred_at->format('M d, Y H:i') }}</p>
-                                <p class="font-semibold capitalize">{{ str_replace('_', ' ', $update->status) }} — {{ $update->progress }}%</p>
-                                @if($update->location)
-                                    <p class="text-sm text-gray-600"><strong>Location:</strong> {{ $update->location }}</p>
-                                @endif
-                                @if($update->note)
-                                    <p class="text-sm text-gray-600"><strong>Note:</strong> {{ $update->note }}</p>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <p class="text-gray-500 text-center">No timeline updates yet.</p>
-                @endif
-            </div>
-
         </div>
-    </div>
-</x-guest-layout>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-8 md:py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Back Link -->
+            <a href="{{ route('tracking.index') }}" class="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Track another shipment
+            </a>
+
+            <!-- Status Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Tracking ID</p>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white font-mono">{{ $shipment->tracking_id }}</h1>
+                    </div>
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold uppercase
+                        {{ $status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                           ($status === 'cancelled' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 
+                           'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200') }}">
+                        <span class="w-2 h-2 rounded-full bg-current animate-pulse"></span>
+                        {{ str_replace('_', ' ', $status) }}
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Shipment Progress</span>
+                        <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ $progress }}%</span>
+                    </div>
+                    <div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500 
+                            {{ $progress >= 100 ? 'bg-green-500' : ($progress >= 50 ? 'bg-emerald-500' : 'bg-yellow-500') }}" 
+                            style="width: {{ $progress }}%;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Info Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Shipped</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->shipped_at->format('M d, Y') }}</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">ETA</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->eta?->format('M d, Y') ?? 'N/A' }}</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Type</p>
+                        <p class="font-semibold text-gray-900 dark:text-white capitalize">{{ str_replace('_', ' ', $shipment->shipment_type) }}</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Updates</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->trackingUpdates->count() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Route Info -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.553-.894L15 7m0 13V7"/>
+                        </svg>
+                        Route Information
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">From</p>
+                                <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->sender_name }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $shipment->pickup_location }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center">
+                            <svg class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                            </svg>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">To</p>
+                                <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->receiver_name }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $shipment->delivery_address }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if($latestUpdate && $latestUpdate->location)
+                        <div class="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800">
+                            <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase tracking-wider mb-1">Current Location</p>
+                            <p class="text-gray-900 dark:text-white font-semibold">{{ $latestUpdate->location }}</p>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Timeline -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Activity Timeline
+                    </h2>
+
+                    @if($shipment->trackingUpdates->count())
+                        <div class="relative space-y-6 max-h-96 overflow-y-auto pr-2">
+                            <div class="absolute left-[15px] top-2 bottom-2 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+
+                            @foreach($shipment->trackingUpdates as $update)
+                                <div class="relative flex gap-4">
+                                    <div class="relative z-10 flex-shrink-0">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center
+                                            {{ $loop->first ? 'bg-emerald-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }}">
+                                            @if($loop->first)
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                </svg>
+                                            @else
+                                                <div class="w-2 h-2 rounded-full bg-current"></div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 pb-2">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm capitalize">
+                                                {{ str_replace('_', ' ', $update->status) }}
+                                            </h4>
+                                            @if($loop->first)
+                                                <span class="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-0.5 rounded">Latest</span>
+                                            @endif
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $update->occurred_at->format('M d, Y • H:i') }}</p>
+                                        
+                                        @if($update->note)
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded">{{ $update->note }}</p>
+                                        @endif
+
+                                        <div class="mt-2 flex items-center gap-2">
+                                            <div class="flex-1 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                                <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $update->progress }}%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ $update->progress }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p>No updates yet</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Want to create and track your own shipments?</p>
+                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors">
+                    Get Started Free
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            © {{ date('Y') }} ShipTrack. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
