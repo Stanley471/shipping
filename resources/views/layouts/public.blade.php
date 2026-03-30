@@ -6,18 +6,28 @@
     <title>@yield('title', config('app.name', 'Shipping Tracker'))</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
-        // Dark mode detection
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')
         } else {
             document.documentElement.classList.remove('dark')
         }
     </script>
+    <style>
+        /* Navbar transition for scroll effect */
+        .navbar-scrolled {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .dark .navbar-scrolled {
+            background-color: rgba(17, 24, 39, 0.95) !important;
+        }
+    </style>
 </head>
 <body class="antialiased bg-white dark:bg-gray-900">
     
     <!-- Navigation -->
-    <nav class="fixed w-full z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+    <nav id="main-nav" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -27,21 +37,21 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
+                    <span class="text-xl font-bold text-white nav-text transition-colors">ShipTrack</span>
                 </a>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Home</a>
-                    <a href="{{ route('tracking.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Track</a>
-                    <a href="#features" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">Features</a>
-                    <a href="#how-it-works" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">How It Works</a>
+                    <a href="/" class="nav-link text-white/90 hover:text-emerald-400 font-medium transition-colors">Home</a>
+                    <a href="{{ route('tracking.index') }}" class="nav-link text-white/90 hover:text-emerald-400 font-medium transition-colors">Track</a>
+                    <a href="#features" class="nav-link text-white/90 hover:text-emerald-400 font-medium transition-colors">Features</a>
+                    <a href="#how-it-works" class="nav-link text-white/90 hover:text-emerald-400 font-medium transition-colors">How It Works</a>
                 </div>
 
                 <!-- Desktop Auth Buttons -->
                 <div class="hidden md:flex items-center gap-4">
                     @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">Log in</a>
+                        <a href="{{ route('login') }}" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Log in</a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get Started</a>
                         @endif
@@ -49,7 +59,7 @@
                 </div>
 
                 <!-- Mobile Hamburger Button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="toggleMobileMenu()">
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors" onclick="toggleMobileMenu()">
                     <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -71,14 +81,7 @@
             <div class="flex flex-col h-full">
                 <!-- Header -->
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                    <a href="/" class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                        </div>
-                        <span class="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
-                    </a>
+                    <span class="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
                     <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -130,22 +133,18 @@
 
                 <!-- Bottom Auth Buttons -->
                 <div class="p-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                            </svg>
-                            Log in
-                        </a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                                </svg>
-                                Get Started
-                            </a>
-                        @endif
-                    @endif
+                    <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        Log in
+                    </a>
+                    <a href="{{ route('register') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                        </svg>
+                        Get Started
+                    </a>
                 </div>
             </div>
         </div>
@@ -156,8 +155,29 @@
         @yield('content')
     </main>
 
-    <!-- Mobile Menu JavaScript -->
+    <!-- Scroll Effect JavaScript -->
     <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('main-nav');
+            const navText = document.querySelectorAll('.nav-text, .nav-link');
+            
+            if (window.scrollY > 50) {
+                nav.classList.add('navbar-scrolled');
+                navText.forEach(el => {
+                    el.classList.remove('text-white', 'text-white/90');
+                    el.classList.add('text-gray-900', 'dark:text-white');
+                });
+            } else {
+                nav.classList.remove('navbar-scrolled');
+                navText.forEach(el => {
+                    el.classList.add('text-white', 'text-white/90');
+                    el.classList.remove('text-gray-900', 'dark:text-white');
+                });
+            }
+        });
+
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const sidebar = document.getElementById('sidebar');
@@ -165,7 +185,6 @@
             const closeIcon = document.getElementById('close-icon');
             
             if (menu.classList.contains('hidden')) {
-                // Open menu
                 menu.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
                 setTimeout(() => {
@@ -174,7 +193,6 @@
                 menuIcon.classList.add('hidden');
                 closeIcon.classList.remove('hidden');
             } else {
-                // Close menu
                 sidebar.classList.add('translate-x-full');
                 setTimeout(() => {
                     menu.classList.add('hidden');
