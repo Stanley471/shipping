@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Track Shipment | {{ config('app.name', 'Shipping Tracker') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="antialiased bg-gray-50 dark:bg-gray-900 min-h-screen">
-    
-    <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="/" class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
-                </a>
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm">Log in</a>
-                    <a href="{{ route('register') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">Get Started</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.public')
 
+@section('title', 'Track Shipment | ' . config('app.name', 'Shipping Tracker'))
+
+@section('content')
     <!-- Main Content -->
     <main class="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-12">
         <div class="w-full max-w-md">
@@ -99,13 +74,4 @@
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            © {{ date('Y') }} ShipTrack. All rights reserved.
-        </div>
-    </footer>
-
-</body>
-</html>
+@endsection

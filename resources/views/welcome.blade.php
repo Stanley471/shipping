@@ -1,44 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Shipping Tracker') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
-</head>
-<body class="antialiased bg-white dark:bg-gray-900">
-    
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">ShipTrack</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium">Log in</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get Started</a>
-                        @endif
-                    @endif
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.public')
 
+@section('title', config('app.name', 'Shipping Tracker'))
+
+@section('content')
     <!-- Hero Section -->
     <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto text-center">
@@ -61,7 +25,7 @@
     </section>
 
     <!-- Features Grid -->
-    <section class="py-20 bg-gray-50 dark:bg-gray-800/50">
+    <section id="features" class="py-20 bg-gray-50 dark:bg-gray-800/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Everything You Need</h2>
@@ -103,7 +67,7 @@
     </section>
 
     <!-- How It Works -->
-    <section class="py-20">
+    <section id="how-it-works" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">How It Works</h2>
@@ -171,6 +135,4 @@
             </div>
         </div>
     </footer>
-
-</body>
-</html>
+@endsection
