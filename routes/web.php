@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('shipments', ShipmentController::class);
     Route::post('/shipments/{shipment}/updates', [\App\Http\Controllers\TrackingUpdateController::class, 'store'])
     ->name('tracking-updates.store');
+
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::post('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::get('/shipments', [AdminController::class, 'shipments'])->name('shipments');
+    });
 });
 
 require __DIR__.'/auth.php';

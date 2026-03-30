@@ -25,6 +25,10 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        if (! $request->user()->is_active) {
+            Auth::logout();
+            return back()->withErrors(['email' => 'Your account has been suspended.']);
+        }
 
         $request->session()->regenerate();
 
