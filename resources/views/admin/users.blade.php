@@ -1,68 +1,75 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Manage Users
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {{ session('error') }}
-                </div>
-            @endif
+@section('title', 'Manage Users')
+@section('page-title', 'Manage Users')
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach($users as $user)
-                        <tr>
-                            <td class="px-6 py-4">{{ $user->name }}</td>
-                            <td class="px-6 py-4">{{ $user->email }}</td>
-                            <td class="px-6 py-4 capitalize">{{ $user->role }}</td>
-                            <td class="px-6 py-4">
-                                @if($user->is_active)
-                                    <span class="text-green-600 font-medium">Active</span>
-                                @else
-                                    <span class="text-red-600 font-medium">Suspended</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4">
-                                @if($user->id !== auth()->id())
-                                    <form method="POST" action="{{ route('admin.users.toggle', $user) }}" class="inline">
-                                        @csrf
-                                        <button type="submit" class="{{ $user->is_active ? 'text-red-600' : 'text-green-600' }} hover:underline">
-                                            {{ $user->is_active ? 'Suspend' : 'Activate' }}
-                                        </button>
-                                    </form>
-                                @else
-                                    <span class="text-gray-400">You</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-4">
-                {{ $users->links() }}
-            </div>
+@section('content')
+<div class="max-w-7xl mx-auto">
+    
+    <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+            <h3 class="font-bold text-slate-900 dark:text-white">All Users</h3>
+            <span class="text-sm text-slate-500 dark:text-slate-400">{{ $users->total() }} total users</span>
+        </div>
+        
+        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+            <thead class="table-header">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Name</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Email</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Role</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Status</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                @forelse($users as $user)
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="px-6 py-4 text-slate-900 dark:text-white font-medium">{{ $user->name }}</td>
+                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400">{{ $user->email }}</td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                            {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-400' : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' }}">
+                            {{ $user->role }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($user->is_active)
+                            <span class="inline-flex items-center gap-1.5 text-green-600 dark:text-green-400 font-medium text-sm">
+                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                Active
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400 font-medium text-sm">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                Suspended
+                            </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($user->id !== auth()->id())
+                            <form method="POST" action="{{ route('admin.users.toggle', $user) }}" class="inline">
+                                @csrf
+                                <button type="submit" class="text-sm font-medium {{ $user->is_active ? 'text-red-600 dark:text-red-400 hover:text-red-800' : 'text-green-600 dark:text-green-400 hover:text-green-800' }} transition-colors">
+                                    {{ $user->is_active ? 'Suspend' : 'Activate' }}
+                                </button>
+                            </form>
+                        @else
+                            <span class="text-slate-400 text-sm">You</span>
+                        @endif
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No users found</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+        
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700">
+            {{ $users->links() }}
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
