@@ -8,45 +8,48 @@
     
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+        <!-- Total Users - Indigo -->
+        <div class="rounded-2xl p-6 border border-indigo-200 dark:border-indigo-800 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700 shadow-lg shadow-indigo-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Total Users</p>
-                    <p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">{{ $totalUsers }}</p>
+                    <p class="text-sm text-indigo-100 font-medium">Total Users</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $totalUsers }}</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
         
-        <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+        <!-- Total Shipments - Blue -->
+        <div class="rounded-2xl p-6 border border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 shadow-lg shadow-blue-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Total Shipments</p>
-                    <p class="text-3xl font-bold text-slate-900 dark:text-white mt-1">{{ $totalShipments }}</p>
+                    <p class="text-sm text-blue-100 font-medium">Total Shipments</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $totalShipments }}</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                     </svg>
                 </div>
             </div>
         </div>
         
-        <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+        <!-- Quick Actions - Purple -->
+        <div class="rounded-2xl p-6 border border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 shadow-lg shadow-purple-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Quick Links</p>
+                    <p class="text-sm text-purple-100 font-medium">Quick Links</p>
                     <div class="flex gap-3 mt-2">
-                        <a href="{{ route('admin.users.index') }}" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Users</a>
-                        <a href="{{ route('admin.shipments.index') }}" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Shipments</a>
+                        <a href="{{ route('admin.users.index') }}" class="text-sm text-white font-medium hover:text-purple-100 underline underline-offset-2">Users</a>
+                        <a href="{{ route('admin.shipments.index') }}" class="text-sm text-white font-medium hover:text-purple-100 underline underline-offset-2">Shipments</a>
                     </div>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                 </div>

@@ -30,9 +30,9 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/users', [AdminController::class, 'users'])->name('users.index');
         Route::post('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
-        Route::get('/shipments', [AdminController::class, 'shipments'])->name('shipments');
+        Route::get('/shipments', [AdminController::class, 'shipments'])->name('shipments.index');
     });
 });
 

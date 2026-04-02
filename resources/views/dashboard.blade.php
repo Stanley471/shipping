@@ -29,53 +29,59 @@
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
+        <!-- Total Shipments - Blue -->
+        <div class="rounded-2xl p-5 border border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 shadow-lg shadow-blue-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Total Shipments</p>
-                    <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ $totalShipments }}</p>
+                    <p class="text-sm text-blue-100 font-medium">Total Shipments</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $totalShipments }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
+        <!-- Active - Amber -->
+        <div class="rounded-2xl p-5 border border-amber-200 dark:border-amber-800 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 shadow-lg shadow-amber-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Active</p>
-                    <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ $activeShipments }}</p>
+                    <p class="text-sm text-amber-100 font-medium">Active</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $activeShipments }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
+        <!-- Delivered - Green -->
+        <div class="rounded-2xl p-5 border border-green-200 dark:border-green-800 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 shadow-lg shadow-green-500/20">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Delivered</p>
-                    <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">{{ $deliveredShipments }}</p>
+                    <p class="text-sm text-green-100 font-medium">Delivered</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ $deliveredShipments }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <a href="{{ route('shipments.create') }}" class="dashboard-card rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800 bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2 group">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span class="text-white font-semibold">New Shipment</span>
+        <!-- New Shipment Button -->
+        <a href="{{ route('shipments.create') }}" class="rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:scale-[1.02] transition-all flex flex-col items-center justify-center gap-2 group">
+            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+            </div>
+            <span class="text-white font-semibold text-sm">New Shipment</span>
         </a>
     </div>
 
