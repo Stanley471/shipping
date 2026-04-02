@@ -57,9 +57,14 @@
                                 {{ $shipment->shipped_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <a href="{{ route('shipments.show', $shipment) }}" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-medium text-sm">
-                                    View
-                                </a>
+                                <div class="flex items-center justify-end gap-3">
+                                    <a href="{{ route('shipments.edit', $shipment) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-sm">
+                                        Edit
+                                    </a>
+                                    <a href="{{ route('shipments.show', $shipment) }}" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-medium text-sm">
+                                        View
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -98,7 +103,10 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-xs text-slate-400 dark:text-slate-500">{{ $shipment->shipped_at->format('M d, Y') }}</span>
-                        <a href="{{ route('shipments.show', $shipment) }}" class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">View Details →</a>
+                        <div class="flex items-center gap-3">
+                            <a href="{{ route('shipments.edit', $shipment) }}" class="text-blue-600 dark:text-blue-400 font-medium text-sm">Edit</a>
+                            <a href="{{ route('shipments.show', $shipment) }}" class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">View →</a>
+                        </div>
                     </div>
                 </div>
             @endforeach

@@ -36,7 +36,7 @@ class ShipmentPolicy
      */
     public function update(User $user, Shipment $shipment): bool
     {
-        return false;
+        return $user->id === $shipment->user_id;
     }
 
     /**

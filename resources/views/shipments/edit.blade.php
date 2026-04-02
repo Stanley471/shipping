@@ -1,0 +1,180 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Shipment')
+@section('page-title', 'Edit Shipment')
+
+@section('content')
+<div class="max-w-4xl mx-auto">
+    
+    <form method="POST" action="{{ route('shipments.update', $shipment) }}" class="space-y-6">
+        @csrf
+        @method('PUT')
+
+        <!-- Tracking ID Display -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tracking ID</p>
+                    <p class="text-2xl font-mono font-bold text-slate-900 dark:text-white">{{ $shipment->tracking_id }}</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipment Details Section -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Shipment Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Shipment Type -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Shipment Type</label>
+                    <select name="shipment_type" class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>
+                        <option value="air_freight" {{ old('shipment_type', $shipment->shipment_type) == 'air_freight' ? 'selected' : '' }}>Air Freight</option>
+                        <option value="sea_freight" {{ old('shipment_type', $shipment->shipment_type) == 'sea_freight' ? 'selected' : '' }}>Sea Freight</option>
+                        <option value="road_freight" {{ old('shipment_type', $shipment->shipment_type) == 'road_freight' ? 'selected' : '' }}>Road Freight</option>
+                        <option value="express_delivery" {{ old('shipment_type', $shipment->shipment_type) == 'express_delivery' ? 'selected' : '' }}>Express Delivery</option>
+                    </select>
+                    @error('shipment_type')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Shipping Started At -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Shipping Started At</label>
+                    <input type="datetime-local" name="shipped_at" value="{{ old('shipped_at', $shipment->shipped_at->format('Y-m-d\TH:i')) }}" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>
+                    @error('shipped_at')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- ETA -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Estimated Delivery (ETA)</label>
+                    <input type="datetime-local" name="eta" value="{{ old('eta', $shipment->eta?->format('Y-m-d\TH:i')) }}" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('eta')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Details Section -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Extra Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Courier -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Courier</label>
+                    <input type="text" name="courier" value="{{ old('courier', $shipment->courier) }}" placeholder="e.g., DHL, FedEx"
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('courier')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Quantity</label>
+                    <input type="number" name="quantity" value="{{ old('quantity', $shipment->quantity) }}" min="1" placeholder="Number of items"
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('quantity')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Fragile -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fragile?</label>
+                    <select name="is_fragile" class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                        <option value="0" {{ old('is_fragile', $shipment->is_fragile ? '1' : '0') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('is_fragile', $shipment->is_fragile ? '1' : '0') == '1' ? 'selected' : '' }}>Yes</option>
+                    </select>
+                    @error('is_fragile')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+            </div>
+        </div>
+
+        <!-- Sender & Receiver Section -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Sender & Receiver</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Sender Name -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Sender Name</label>
+                    <input type="text" name="sender_name" value="{{ old('sender_name', $shipment->sender_name) }}" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>
+                    @error('sender_name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Receiver Name -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Receiver Name</label>
+                    <input type="text" name="receiver_name" value="{{ old('receiver_name', $shipment->receiver_name) }}" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>
+                    @error('receiver_name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Receiver Email -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Receiver Email (Optional)</label>
+                    <input type="email" name="receiver_email" value="{{ old('receiver_email', $shipment->receiver_email) }}" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('receiver_email')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Shipping From -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Shipping From (Sender's Address)</label>
+                    <textarea name="pickup_location" rows="3" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>{{ old('pickup_location', $shipment->pickup_location) }}</textarea>
+                    @error('pickup_location')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Destination -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Destination (Receiver's Address)</label>
+                    <textarea name="delivery_address" rows="3" 
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500" required>{{ old('delivery_address', $shipment->delivery_address) }}</textarea>
+                    @error('delivery_address')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Save Changes
+            </button>
+            <a href="{{ route('shipments.show', $shipment) }}" class="flex-1 sm:flex-initial bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold py-4 px-8 rounded-xl transition-colors text-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+@endsection

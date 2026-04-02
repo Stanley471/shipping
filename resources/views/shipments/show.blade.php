@@ -46,6 +46,9 @@
                         <a href="{{ route('shipments.index') }}" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                             Back
                         </a>
+                        <a href="{{ route('shipments.edit', $shipment) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                            Edit
+                        </a>
                     </div>
                 </div>
 

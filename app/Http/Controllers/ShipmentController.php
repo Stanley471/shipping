@@ -86,4 +86,45 @@ class ShipmentController extends Controller
 
         return view('shipments.show', compact('shipment'));
     }
+
+    public function edit(Shipment $shipment)
+    {
+        $this->authorize('update', $shipment);
+        return view('shipments.edit', compact('shipment'));
+    }
+
+    public function update(Request $request, Shipment $shipment)
+    {
+        $this->authorize('update', $shipment);
+
+        $validated = $request->validate([
+            'sender_name' => 'required|string|max:255',
+            'receiver_name' => 'required|string|max:255',
+            'receiver_email' => 'nullable|email|max:255',
+            'pickup_location' => 'required|string',
+            'delivery_address' => 'required|string',
+            'shipped_at' => 'required|date',
+            'shipment_type' => 'required|string|in:air_freight,sea_freight,road_freight,express_delivery',
+            'eta' => 'nullable|date',
+            'courier' => 'nullable|string|max:255',
+            'quantity' => 'nullable|integer|min:1',
+            'is_fragile' => 'nullable|boolean',
+        ]);
+
+        $shipment->update([
+            'sender_name' => $validated['sender_name'],
+            'receiver_name' => $validated['receiver_name'],
+            'receiver_email' => $validated['receiver_email'],
+            'pickup_location' => $validated['pickup_location'],
+            'delivery_address' => $validated['delivery_address'],
+            'shipped_at' => $validated['shipped_at'],
+            'shipment_type' => $validated['shipment_type'],
+            'eta' => $validated['eta'],
+            'courier' => $validated['courier'] ?? null,
+            'quantity' => $validated['quantity'] ?? null,
+            'is_fragile' => $validated['is_fragile'] ?? false,
+        ]);
+
+        return redirect()->route('shipments.show', $shipment)->with('success', 'Shipment updated successfully.');
+    }
 }
