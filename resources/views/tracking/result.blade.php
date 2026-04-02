@@ -227,14 +227,13 @@
                 </div>
             </div>
 
-            <!-- CTA -->
+            <!-- Back to Tracking -->
             <div class="mt-8 text-center">
-                <p class="text-gray-600 dark:text-gray-400 mb-4">Want to create and track your own shipments?</p>
-                <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors">
-                    Get Started Free
+                <a href="{{ route('tracking.index') }}" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
+                    Track Another Shipment
                 </a>
             </div>
         </div>

@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Main Content -->
-    <main class="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-12">
+    <main class="flex items-center justify-center min-h-screen px-4 pt-32 pb-12">
         <div class="w-full max-w-md">
             
             <!-- Track Card -->
@@ -42,13 +42,6 @@
                         Track Shipment
                     </button>
                 </form>
-
-                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Need to ship something? 
-                        <a href="{{ route('register') }}" class="text-emerald-600 dark:text-emerald-400 font-medium hover:underline">Create an account</a>
-                    </p>
-                </div>
             </div>
 
             <!-- Features -->
