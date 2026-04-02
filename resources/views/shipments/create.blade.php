@@ -52,6 +52,46 @@
             </div>
         </div>
 
+        <!-- Shipment Details Section -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Shipment Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Courier -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Courier</label>
+                    <input type="text" name="courier" value="{{ old('courier') }}" placeholder="e.g., DHL, FedEx"
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('courier')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Quantity</label>
+                    <input type="number" name="quantity" value="{{ old('quantity') }}" min="1" placeholder="Number of items"
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                    @error('quantity')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Fragile -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fragile?</label>
+                    <select name="is_fragile" class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:ring-emerald-500">
+                        <option value="0" {{ old('is_fragile') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('is_fragile') == '1' ? 'selected' : '' }}>Yes</option>
+                    </select>
+                    @error('is_fragile')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+            </div>
+        </div>
+
         <!-- Sender & Receiver Section -->
         <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
             <div class="flex items-center gap-3 mb-6">

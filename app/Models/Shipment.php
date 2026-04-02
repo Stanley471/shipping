@@ -23,11 +23,16 @@ class Shipment extends Model
         'shipped_at',
         'shipment_type',
         'eta',
+        'courier',
+        'quantity',
+        'is_fragile',
     ];
 
     protected $casts = [
         'shipped_at' => 'datetime',
         'eta' => 'datetime',
+        'is_fragile' => 'boolean',
+        'quantity' => 'integer',
     ];
 
     public function user(): BelongsTo

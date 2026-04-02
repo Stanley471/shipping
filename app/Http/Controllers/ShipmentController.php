@@ -43,6 +43,9 @@ class ShipmentController extends Controller
             'occurred_at' => 'required|date',
             'shipment_type' => 'required|string|in:air_freight,sea_freight,road_freight,express_delivery',
             'eta' => 'nullable|date|after:shipped_at',
+            'courier' => 'nullable|string|max:255',
+            'quantity' => 'nullable|integer|min:1',
+            'is_fragile' => 'nullable|boolean',
         ]);
 
         $shipment = Shipment::create([
@@ -56,6 +59,9 @@ class ShipmentController extends Controller
             'shipped_at' => $validated['shipped_at'],
             'shipment_type' => $validated['shipment_type'],
             'eta' => $validated['eta'],
+            'courier' => $validated['courier'] ?? null,
+            'quantity' => $validated['quantity'] ?? null,
+            'is_fragile' => $validated['is_fragile'] ?? false,
         ]);
 
         TrackingUpdate::create([

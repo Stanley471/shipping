@@ -70,6 +70,45 @@
                         <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->trackingUpdates->count() }}</p>
                     </div>
                 </div>
+
+                <!-- Shipment Details Section -->
+                @if($shipment->courier || $shipment->quantity || !is_null($shipment->is_fragile))
+                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Shipment Details</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        @if($shipment->courier)
+                        <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
+                            <p class="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">Courier</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->courier }}</p>
+                        </div>
+                        @endif
+                        @if($shipment->quantity)
+                        <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-100 dark:border-purple-800">
+                            <p class="text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">Quantity</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $shipment->quantity }} {{ $shipment->quantity == 1 ? 'item' : 'items' }}</p>
+                        </div>
+                        @endif
+                        @if(!is_null($shipment->is_fragile))
+                        <div class="text-center p-4 {{ $shipment->is_fragile ? 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800' }} rounded-xl border">
+                            <p class="text-xs {{ $shipment->is_fragile ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400' }} uppercase tracking-wider mb-1">Fragile</p>
+                            <p class="font-semibold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+                                @if($shipment->is_fragile)
+                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                    </svg>
+                                    Yes
+                                @else
+                                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    No
+                                @endif
+                            </p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
