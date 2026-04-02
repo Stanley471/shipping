@@ -1,4 +1,4 @@
-@extends('layouts.public')
+@extends('layouts.tracking')
 
 @section('title', $shipment->tracking_id . ' | Tracking Result')
 
@@ -10,16 +10,10 @@
     @endphp
 
     <!-- Main Content -->
-    <main class="py-8 md:py-12">
+    <main>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <!-- Back Link -->
-            <a href="{{ route('tracking.index') }}" class="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mb-6">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Track another shipment
-            </a>
+
 
             <!-- Status Card -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 md:p-8 mb-6">
@@ -227,15 +221,7 @@
                 </div>
             </div>
 
-            <!-- Back to Tracking -->
-            <div class="mt-8 text-center">
-                <a href="{{ route('tracking.index') }}" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Track Another Shipment
-                </a>
-            </div>
+
         </div>
     </main>
 @endsection

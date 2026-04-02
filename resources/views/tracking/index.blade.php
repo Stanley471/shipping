@@ -1,4 +1,4 @@
-@extends('layouts.public')
+@extends('layouts.tracking')
 
 @section('title', 'Track Shipment | ' . config('app.name', 'Shipping Tracker'))
 
