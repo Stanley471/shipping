@@ -25,12 +25,13 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-        if (! $request->user()->is_active) {
-            Auth::logout();
-            return back()->withErrors(['email' => 'Your account has been suspended.']);
-        }
-
         $request->session()->regenerate();
+
+        // Check if user is suspended and show warning
+        if (! $request->user()->is_active) {
+            return redirect()->intended(route('dashboard', absolute: false))
+                ->with('warning', 'Your account has been suspended. You can view your existing shipments but cannot create new ones.');
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

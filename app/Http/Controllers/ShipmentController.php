@@ -24,6 +24,11 @@ class ShipmentController extends Controller
 
     public function store(Request $request)
     {
+        // Check if user is suspended
+        if (! Auth::user()->is_active) {
+            return back()->with('error', 'Your account is suspended. You cannot create new shipments.');
+        }
+
         $validated = $request->validate([
             'sender_name' => 'required|string|max:255',
             'receiver_name' => 'required|string|max:255',
