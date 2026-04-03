@@ -322,8 +322,8 @@
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">Aircraft</div>
-                    <div class="info-value">Boeing 777-300ER</div>
+                    <div class="info-label">Price</div>
+                    <div class="info-value">${{ number_format($ticket['price'] ?? 0, 2) }}</div>
                 </div>
             </div>
             

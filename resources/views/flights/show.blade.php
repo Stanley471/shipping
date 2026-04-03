@@ -50,7 +50,7 @@
             </div>
 
             <!-- Details Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
                 <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 text-center border border-slate-200 dark:border-slate-700">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Passenger</p>
                     <p class="font-bold text-slate-900 dark:text-white text-lg">{{ $flightTicket->passenger_name }}</p>
@@ -69,6 +69,11 @@
                 <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 text-center border border-slate-200 dark:border-slate-700">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Class</p>
                     <p class="font-bold text-slate-900 dark:text-white text-lg">{{ $flightTicket->class }}</p>
+                </div>
+                
+                <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4 text-center border border-emerald-200 dark:border-emerald-800">
+                    <p class="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">Price</p>
+                    <p class="font-bold text-emerald-700 dark:text-emerald-400 text-lg">${{ number_format($flightTicket->price, 2) }}</p>
                 </div>
             </div>
 

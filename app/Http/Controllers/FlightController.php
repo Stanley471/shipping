@@ -87,6 +87,7 @@ class FlightController extends Controller
             'arrival_time' => 'required|string',
             'date' => 'required|date',
             'seat_class' => 'required|in:economy,business,first',
+            'price' => 'required|numeric|min:1|max:999999',
         ]);
         
         // Generate random ticket details
@@ -112,6 +113,7 @@ class FlightController extends Controller
             'seat' => $seatNumber,
             'gate' => $gate,
             'class' => strtoupper($validated['seat_class']),
+            'price' => $validated['price'],
         ]);
         
         $ticket = [
@@ -129,6 +131,7 @@ class FlightController extends Controller
             'seat' => $seatNumber,
             'gate' => $gate,
             'class' => strtoupper($validated['seat_class']),
+            'price' => $validated['price'],
             'barcode' => $this->generateBarcode($ticketNumber),
             'qr_code' => $this->generateQRCode($bookingRef),
         ];
@@ -214,6 +217,7 @@ class FlightController extends Controller
             'seat' => $flightTicket->seat,
             'gate' => $flightTicket->gate,
             'class' => $flightTicket->class,
+            'price' => $flightTicket->price,
             'barcode' => $this->generateBarcode($flightTicket->ticket_number),
             'qr_code' => $this->generateQRCode($flightTicket->booking_reference),
         ];

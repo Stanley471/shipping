@@ -47,6 +47,7 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Flight</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Passenger</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Price</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Date</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-right text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Actions</th>
@@ -69,6 +70,9 @@
                                 <td class="px-6 py-4">
                                     <p class="font-medium text-slate-900 dark:text-white">{{ $ticket->passenger_name }}</p>
                                     <p class="text-sm text-slate-500 dark:text-slate-400">{{ $ticket->booking_reference }}</p>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <p class="font-semibold text-emerald-600 dark:text-emerald-400">${{ number_format($ticket->price, 2) }}</p>
                                 </td>
                                 <td class="px-6 py-4">
                                     <p class="text-slate-900 dark:text-white">{{ $ticket->flight_date->format('M d, Y') }}</p>

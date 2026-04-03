@@ -22,7 +22,7 @@
         <div class="p-6 md:p-8">
             <!-- Flight Info Card -->
             <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 mb-6 border border-slate-200 dark:border-slate-700">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-xl">✈️</div>
                         <div>
@@ -30,9 +30,16 @@
                             <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight_number'] ?? 'Unknown' }}</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">${{ number_format($flight['price'] ?? 0) }}</p>
-                        <p class="text-xs text-slate-500">Total price</p>
+                </div>
+                
+                <!-- Editable Price -->
+                <div class="bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
+                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Ticket Price (USD)</label>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl font-bold text-slate-500">$</span>
+                        <input type="number" name="price" value="{{ $flight['price'] ?? 0 }}" min="1" max="99999"
+                            class="flex-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400 bg-transparent border-none focus:ring-0 p-0"
+                            required>
                     </div>
                 </div>
                 
