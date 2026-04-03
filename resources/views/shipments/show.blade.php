@@ -18,7 +18,7 @@
         <div class="lg:col-span-7 space-y-6">
             
             <!-- Summary Card -->
-            <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700 relative overflow-hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 relative overflow-hidden shadow-sm">
                 <div class="absolute top-0 right-0 p-4 opacity-5">
                     <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
@@ -43,7 +43,7 @@
                         </p>
                     </div>
                     <div class="flex gap-2">
-                        <a href="{{ route('shipments.index') }}" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <a href="{{ route('shipments.index') }}" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
                             Back
                         </a>
                         <a href="{{ route('shipments.edit', $shipment) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
@@ -76,8 +76,8 @@
             <!-- Origin & Destination Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Sender -->
-                <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700 flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 flex items-start gap-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Receiver -->
-                <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700 flex items-start gap-4">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 flex items-start gap-4 shadow-sm">
                     <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -110,19 +110,19 @@
 
             <!-- Info Grid -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="dashboard-card rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Shipped</p>
                     <p class="font-semibold text-slate-900 dark:text-white">{{ $shipment->shipped_at->format('M d, Y') }}</p>
                 </div>
-                <div class="dashboard-card rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">ETA</p>
                     <p class="font-semibold text-slate-900 dark:text-white">{{ $shipment->eta?->format('M d, Y') ?? 'N/A' }}</p>
                 </div>
-                <div class="dashboard-card rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Type</p>
                     <p class="font-semibold text-slate-900 dark:text-white capitalize">{{ str_replace('_', ' ', $shipment->shipment_type) }}</p>
                 </div>
-                <div class="dashboard-card rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
                     <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Updates</p>
                     <p class="font-semibold text-slate-900 dark:text-white">{{ $shipment->trackingUpdates->count() }}</p>
                 </div>
@@ -133,7 +133,7 @@
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Add Update Form -->
-            <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Add Tracking Update</h3>
                 <form method="POST" action="{{ route('tracking-updates.store', $shipment) }}" class="space-y-4">
                     @csrf
@@ -195,7 +195,7 @@
             </div>
 
             <!-- Timeline -->
-            <div class="dashboard-card rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">Activity Timeline</h3>
                 
                 @if($shipment->trackingUpdates->count())
@@ -230,7 +230,7 @@
                                     <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">{{ $update->occurred_at->format('M d, Y • H:i') }}</p>
                                     
                                     @if($update->note)
-                                        <div class="mt-2 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-xs text-slate-600 dark:text-slate-300">
+                                        <div class="mt-2 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg text-xs text-slate-600 dark:text-slate-300">
                                             {{ $update->note }}
                                         </div>
                                     @endif

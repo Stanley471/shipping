@@ -89,7 +89,7 @@
     <div class="grid lg:grid-cols-3 gap-6">
         
         <!-- Recent Shipments -->
-        <div class="lg:col-span-2 dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
             <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-slate-900 dark:text-white">Recent Shipments</h3>
                 <a href="{{ route('shipments.index') }}" class="text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:underline">View All</a>
@@ -148,7 +148,7 @@
         <!-- Quick Actions & Help -->
         <div class="space-y-6">
             <!-- Track Shipment -->
-            <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <h3 class="font-bold text-slate-900 dark:text-white mb-2">Track a Shipment</h3>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Have a tracking ID? Check the status instantly.</p>
                 <a href="{{ route('tracking.index') }}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
@@ -160,7 +160,7 @@
             </div>
 
             <!-- Quick Links -->
-            <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <h3 class="font-bold text-slate-900 dark:text-white mb-4">Quick Links</h3>
                 <div class="space-y-2">
                     <a href="{{ route('shipments.create') }}" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
@@ -191,7 +191,7 @@
             </div>
 
             <!-- Support -->
-            <div class="dashboard-card rounded-2xl p-5 border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-emerald-500 to-emerald-600">
+            <div class="rounded-2xl p-5 border border-emerald-500 bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-sm">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

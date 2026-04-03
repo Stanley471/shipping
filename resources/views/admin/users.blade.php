@@ -6,27 +6,27 @@
 @section('content')
 <div class="max-w-7xl mx-auto">
     
-    <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-            <h3 class="font-bold text-slate-900 dark:text-white">All Users</h3>
-            <span class="text-sm text-slate-500 dark:text-slate-400">{{ $users->total() }} total users</span>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+        <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
+            <h3 class="font-bold text-slate-900 dark:text-white text-lg">All Users</h3>
+            <span class="text-sm text-slate-600 dark:text-slate-400">{{ $users->total() }} total users</span>
         </div>
         
         <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-            <thead class="table-header">
+            <thead class="bg-slate-100 dark:bg-slate-700">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Name</th>
-                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Email</th>
-                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Role</th>
-                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Status</th>
-                    <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Action</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+            <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
                 @forelse($users as $user)
-                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                     <td class="px-6 py-4 text-slate-900 dark:text-white font-medium">{{ $user->name }}</td>
-                    <td class="px-6 py-4 text-slate-600 dark:text-slate-400">{{ $user->email }}</td>
+                    <td class="px-6 py-4 text-slate-700 dark:text-slate-300">{{ $user->email }}</td>
                     <td class="px-6 py-4">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
                             {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-400' : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' }}">
@@ -67,7 +67,7 @@
             </tbody>
         </table>
         
-        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700">
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             {{ $users->links() }}
         </div>
     </div>

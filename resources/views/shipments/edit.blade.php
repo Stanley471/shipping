@@ -11,7 +11,7 @@
         @method('PUT')
 
         <!-- Tracking ID Display -->
-        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-slate-500 dark:text-slate-400">Tracking ID</p>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Shipment Details Section -->
-        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
             <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Extra Details Section -->
-        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
             <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@
         </div>
 
         <!-- Sender & Receiver Section -->
-        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
+        <div class="bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8">
             <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

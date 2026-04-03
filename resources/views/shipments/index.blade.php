@@ -8,30 +8,30 @@
     
     @if($shipments->count())
         <!-- Desktop Table -->
-        <div class="hidden md:block dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="hidden md:block bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
             <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                <thead class="table-header">
+                <thead class="bg-slate-100 dark:bg-slate-700">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tracking ID</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Receiver</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progress</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Shipped</th>
-                        <th class="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Action</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Tracking ID</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Receiver</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Progress</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Shipped</th>
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
                     @foreach($shipments as $shipment)
                         @php
                             $latestUpdate = $shipment->trackingUpdates->sortByDesc('occurred_at')->first();
                             $status = $latestUpdate?->status ?? 'pending';
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="font-mono font-bold text-slate-900 dark:text-white">{{ $shipment->tracking_id }}</span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-slate-700 dark:text-slate-300">
+                            <td class="px-6 py-4 whitespace-nowrap text-slate-800 dark:text-slate-200">
                                 {{ $shipment->receiver_name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -53,7 +53,7 @@
                                     <span class="text-xs text-slate-500 dark:text-slate-400">{{ $latestUpdate?->progress ?? 0 }}%</span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">
                                 {{ $shipment->shipped_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right">
@@ -70,7 +70,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700">
+            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                 {{ $shipments->links() }}
             </div>
         </div>
@@ -82,7 +82,7 @@
                     $latestUpdate = $shipment->trackingUpdates->sortByDesc('occurred_at')->first();
                     $status = $latestUpdate?->status ?? 'pending';
                 @endphp
-                <div class="dashboard-card rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm">
                     <div class="flex justify-between items-start mb-3">
                         <div>
                             <p class="font-mono font-bold text-slate-900 dark:text-white">{{ $shipment->tracking_id }}</p>
@@ -117,7 +117,7 @@
 
     @else
         <!-- Empty State -->
-        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center shadow-sm">
             <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
