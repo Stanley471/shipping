@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FlightTicket;
 use App\Services\FlightApiService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class FlightController extends Controller
 {
@@ -14,6 +16,7 @@ class FlightController extends Controller
     public function __construct(FlightApiService $flightApi)
     {
         $this->flightApi = $flightApi;
+        $this->middleware('auth');
     }
     
     /**
@@ -70,7 +73,7 @@ class FlightController extends Controller
     }
     
     /**
-     * Generate fake ticket PDF
+     * Generate ticket PDF and save to database
      */
     public function generateTicket(Request $request)
     {
@@ -89,9 +92,27 @@ class FlightController extends Controller
         // Generate random ticket details
         $ticketNumber = 'TKT' . strtoupper(Str::random(8));
         $bookingRef = strtoupper(Str::random(6));
-        $seatNumber = rand(1, 50) . chr(65 + rand(0, 5)); // e.g., 12A
+        $seatNumber = rand(1, 50) . chr(65 + rand(0, 5));
         $gate = 'T' . rand(1, 5) . '-' . rand(1, 50);
-        $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600); // 1 hour before
+        $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600);
+        
+        // Save to database
+        $flightTicket = FlightTicket::create([
+            'user_id' => auth()->id(),
+            'ticket_number' => $ticketNumber,
+            'booking_reference' => $bookingRef,
+            'passenger_name' => strtoupper($validated['passenger_name']),
+            'flight_number' => $validated['flight_number'],
+            'airline' => $validated['airline'],
+            'origin' => $validated['origin'],
+            'destination' => $validated['destination'],
+            'flight_date' => $validated['date'],
+            'departure_time' => $validated['departure_time'],
+            'arrival_time' => $validated['arrival_time'],
+            'seat' => $seatNumber,
+            'gate' => $gate,
+            'class' => strtoupper($validated['seat_class']),
+        ]);
         
         $ticket = [
             'ticket_number' => $ticketNumber,
@@ -114,9 +135,113 @@ class FlightController extends Controller
         
         // Generate PDF
         $pdf = Pdf::loadView('flights.ticket-pdf', compact('ticket'));
-        $pdf->setPaper([0, 0, 595.28, 283.47]); // Boarding pass size (A5 landscape-ish)
+        $pdf->setPaper([0, 0, 595.28, 283.47]);
         
-        return $pdf->download("ticket-{$bookingRef}.pdf");
+        // Save PDF to storage
+        $filename = "tickets/{$bookingRef}.pdf";
+        Storage::disk('public')->put($filename, $pdf->output());
+        
+        // Update ticket with PDF path
+        $flightTicket->update(['pdf_path' => $filename]);
+        
+        return redirect()->route('flights.show', $flightTicket)
+            ->with('success', 'Flight ticket generated successfully!');
+    }
+    
+    /**
+     * Show user's ticket history
+     */
+    public function index()
+    {
+        $tickets = auth()->user()
+            ->flightTickets()
+            ->latest()
+            ->paginate(10);
+            
+        return view('flights.index', compact('tickets'));
+    }
+    
+    /**
+     * Show single ticket
+     */
+    public function show(FlightTicket $flightTicket)
+    {
+        // Ensure user owns this ticket
+        if ($flightTicket->user_id !== auth()->id()) {
+            abort(403);
+        }
+        
+        return view('flights.show', compact('flightTicket'));
+    }
+    
+    /**
+     * Download ticket PDF
+     */
+    public function download(FlightTicket $flightTicket)
+    {
+        // Ensure user owns this ticket
+        if ($flightTicket->user_id !== auth()->id()) {
+            abort(403);
+        }
+        
+        // Update download stats
+        $flightTicket->update([
+            'download_count' => $flightTicket->download_count + 1,
+            'last_downloaded_at' => now(),
+        ]);
+        
+        // If PDF exists in storage, serve it
+        if ($flightTicket->pdf_path && Storage::disk('public')->exists($flightTicket->pdf_path)) {
+            return Storage::disk('public')->download(
+                $flightTicket->pdf_path,
+                "ticket-{$flightTicket->booking_reference}.pdf"
+            );
+        }
+        
+        // Otherwise regenerate
+        $ticket = [
+            'ticket_number' => $flightTicket->ticket_number,
+            'booking_reference' => $flightTicket->booking_reference,
+            'passenger_name' => $flightTicket->passenger_name,
+            'flight_number' => $flightTicket->flight_number,
+            'airline' => $flightTicket->airline,
+            'origin' => $flightTicket->origin,
+            'destination' => $flightTicket->destination,
+            'date' => $flightTicket->flight_date->format('Y-m-d'),
+            'departure_time' => $flightTicket->departure_time,
+            'arrival_time' => $flightTicket->arrival_time,
+            'boarding_time' => date('H:i', strtotime($flightTicket->departure_time) - 3600),
+            'seat' => $flightTicket->seat,
+            'gate' => $flightTicket->gate,
+            'class' => $flightTicket->class,
+            'barcode' => $this->generateBarcode($flightTicket->ticket_number),
+            'qr_code' => $this->generateQRCode($flightTicket->booking_reference),
+        ];
+        
+        $pdf = Pdf::loadView('flights.ticket-pdf', compact('ticket'));
+        $pdf->setPaper([0, 0, 595.28, 283.47]);
+        
+        return $pdf->download("ticket-{$flightTicket->booking_reference}.pdf");
+    }
+    
+    /**
+     * Delete ticket
+     */
+    public function destroy(FlightTicket $flightTicket)
+    {
+        if ($flightTicket->user_id !== auth()->id()) {
+            abort(403);
+        }
+        
+        // Delete PDF file
+        if ($flightTicket->pdf_path && Storage::disk('public')->exists($flightTicket->pdf_path)) {
+            Storage::disk('public')->delete($flightTicket->pdf_path);
+        }
+        
+        $flightTicket->delete();
+        
+        return redirect()->route('flights.index')
+            ->with('success', 'Ticket deleted successfully.');
     }
     
     /**
@@ -143,8 +268,6 @@ class FlightController extends Controller
      */
     protected function generateQRCode(string $bookingRef): string
     {
-        // In production, use a QR code library
-        // For now, return a data URI placeholder
         return 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode($bookingRef);
     }
 }

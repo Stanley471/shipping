@@ -69,7 +69,6 @@
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/" class="text-white/90 hover:text-emerald-400 font-medium transition-colors">Home</a>
                     <a href="{{ route('tracking.index') }}" class="text-white/90 hover:text-emerald-400 font-medium transition-colors">Track</a>
-                    <a href="{{ route('flights.search') }}" class="text-white/90 hover:text-emerald-400 font-medium transition-colors">Flights</a>
                     <a href="/#features" class="text-white/90 hover:text-emerald-400 font-medium transition-colors">Features</a>
                 </div>
 
@@ -134,12 +133,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                         Track Shipment
-                    </a>
-                    <a href="{{ route('flights.search') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-white/80 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                        </svg>
-                        Flight Tickets
                     </a>
                     <a href="/#features" onclick="toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-white/80 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

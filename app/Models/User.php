@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasMany(Shipment::class);
     }
 
+    public function flightTickets(): HasMany
+    {
+        return $this->hasMany(FlightTicket::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

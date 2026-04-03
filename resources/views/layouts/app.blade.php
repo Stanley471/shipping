@@ -60,6 +60,16 @@
                     Shipments
                 </a>
                 
+                <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+                    <p class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">Tools</p>
+                    <a href="{{ route('flights.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('flights.*') ? 'bg-emerald-50 dark:bg-emerald-600 text-emerald-700 dark:text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        Flight Tickets
+                    </a>
+                </div>
+                
                 @if(Auth::user()->isAdmin())
                 <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
                     <p class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">Admin</p>
@@ -151,6 +161,16 @@
                             </svg>
                             Shipments
                         </a>
+                        
+                        <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+                            <p class="px-3 text-xs font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider mb-2">Tools</p>
+                            <a href="{{ route('flights.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('flights.*') ? 'bg-emerald-50 dark:bg-emerald-600 text-emerald-700 dark:text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                </svg>
+                                Flight Tickets
+                            </a>
+                        </div>
                         
                         @if(Auth::user()->isAdmin())
                         <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
