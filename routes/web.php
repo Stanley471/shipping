@@ -20,6 +20,13 @@ Route::post('/track', [TrackingController::class, 'search'])
     ->middleware('throttle:tracking')
     ->name('tracking.search');
 
+// Flight Ticket Generator Routes
+Route::get('/flights', [\App\Http\Controllers\FlightController::class, 'searchForm'])->name('flights.search');
+Route::post('/flights/search', [\App\Http\Controllers\FlightController::class, 'search'])->name('flights.results');
+Route::get('/flights/book', [\App\Http\Controllers\FlightController::class, 'bookForm'])->name('flights.book');
+Route::post('/flights/ticket', [\App\Http\Controllers\FlightController::class, 'generateTicket'])->name('flights.ticket');
+Route::get('/api/airports', [\App\Http\Controllers\FlightController::class, 'autocompleteAirports'])->name('api.airports');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
