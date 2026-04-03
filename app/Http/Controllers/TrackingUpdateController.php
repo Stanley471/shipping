@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TrackingUpdate as TrackingUpdateMail;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TrackingUpdateController extends Controller
 {
@@ -23,7 +25,7 @@ class TrackingUpdateController extends Controller
             'occurred_at' => 'required|date',
         ]);
 
-        TrackingUpdate::create([
+        $update = TrackingUpdate::create([
             'shipment_id' => $shipment->id,
             'status' => $validated['status'],
             'location' => $validated['location'],
@@ -31,6 +33,17 @@ class TrackingUpdateController extends Controller
             'progress' => $validated['progress'],
             'occurred_at' => $validated['occurred_at'],
         ]);
+
+        // Send email notification if requested
+        if ($request->boolean('send_email')) {
+            // Send to user who created the shipment
+            Mail::to(Auth::user()->email)->send(new TrackingUpdateMail($shipment, $update));
+            
+            // Send to receiver if email provided
+            if ($shipment->receiver_email) {
+                Mail::to($shipment->receiver_email)->send(new TrackingUpdateMail($shipment, $update));
+            }
+        }
 
         return redirect()->route('shipments.show', $shipment)->with('success', 'Tracking update added.');
     }

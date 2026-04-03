@@ -207,6 +207,18 @@
             </div>
         </div>
 
+        <!-- Email Notification Checkbox -->
+        <div class="dashboard-card rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" name="send_email" value="1" {{ old('send_email') ? 'checked' : '' }} 
+                    class="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                <div>
+                    <span class="text-sm font-medium text-slate-900 dark:text-white">Send email notifications</span>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Notify me and the receiver when this shipment is created</p>
+                </div>
+            </label>
+        </div>
+
         <!-- Submit Buttons -->
         <div class="flex flex-col sm:flex-row gap-4">
             <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 flex items-center justify-center gap-2">

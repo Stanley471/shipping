@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ShipmentCreated;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
 use App\Services\TrackingIdGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ShipmentController extends Controller
 {
@@ -73,6 +75,17 @@ class ShipmentController extends Controller
             'progress' => $validated['progress'],
             'occurred_at' => $validated['occurred_at'],
         ]);
+
+        // Send email notifications if requested
+        if ($request->boolean('send_email')) {
+            // Send to user who created the shipment
+            Mail::to(Auth::user()->email)->send(new ShipmentCreated($shipment));
+            
+            // Send to receiver if email provided
+            if ($shipment->receiver_email) {
+                Mail::to($shipment->receiver_email)->send(new ShipmentCreated($shipment));
+            }
+        }
 
         return redirect()->route('shipments.index')->with('success', 'Shipment created successfully.');
     }

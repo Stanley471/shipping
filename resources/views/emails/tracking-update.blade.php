@@ -1,10 +1,26 @@
 <x-mail::message>
-# Introduction
+# Shipment Update
 
-The body of your message.
+Hello {{ $shipment->receiver_name }},
 
-<x-mail::button :url="''">
-Button Text
+Your shipment **{{ $shipment->tracking_id }}** has been updated.
+
+**Status:** {{ ucfirst(str_replace('_', ' ', $update->status)) }}
+
+**Progress:** {{ $update->progress }}%
+
+@if($update->location)
+**Location:** {{ $update->location }}
+@endif
+
+@if($update->note)
+**Note:** {{ $update->note }}
+@endif
+
+**Updated:** {{ $update->occurred_at->format('F d, Y \a\t h:i A') }}
+
+<x-mail::button :url="$trackingUrl">
+View Full Details
 </x-mail::button>
 
 Thanks,<br>

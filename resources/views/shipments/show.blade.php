@@ -179,6 +179,15 @@
                         @error('occurred_at')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
 
+                    <!-- Email Notification Checkbox -->
+                    <div class="pt-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="send_email" value="1" {{ old('send_email') ? 'checked' : '' }} 
+                                class="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                            <span class="text-xs text-slate-600 dark:text-slate-400">Send email notification to customer</span>
+                        </label>
+                    </div>
+
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800">
                         Add Update
                     </button>
