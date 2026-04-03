@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FlightTicket;
 use App\Services\FlightApiService;
+use App\Services\FlightTemplateService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Storage;
 class FlightController extends Controller
 {
     protected FlightApiService $flightApi;
+    protected FlightTemplateService $templateService;
     
-    public function __construct(FlightApiService $flightApi)
+    public function __construct(FlightApiService $flightApi, FlightTemplateService $templateService)
     {
         $this->flightApi = $flightApi;
+        $this->templateService = $templateService;
         $this->middleware('auth');
     }
     
@@ -97,6 +100,11 @@ class FlightController extends Controller
         $gate = 'T' . rand(1, 5) . '-' . rand(1, 50);
         $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600);
         
+        // Detect template from airline
+        $airlineCode = substr($validated['flight_number'], 0, 2); // Extract airline code from flight number
+        $template = $this->templateService->getTemplateForAirline($airlineCode, null);
+        $templateConfig = $this->templateService->getTemplateConfig($template);
+        
         // Save to database
         $flightTicket = FlightTicket::create([
             'user_id' => auth()->id(),
@@ -114,6 +122,7 @@ class FlightController extends Controller
             'gate' => $gate,
             'class' => strtoupper($validated['seat_class']),
             'price' => $validated['price'],
+            'template' => $template,
         ]);
         
         $ticket = [
@@ -134,10 +143,13 @@ class FlightController extends Controller
             'price' => $validated['price'],
             'barcode' => $this->generateBarcode($ticketNumber),
             'qr_code' => $this->generateQRCode($bookingRef),
+            'template' => $template,
+            'template_config' => $templateConfig,
         ];
         
-        // Generate PDF
-        $pdf = Pdf::loadView('flights.ticket-pdf', compact('ticket'));
+        // Generate PDF with airline-specific template
+        $templateView = $this->templateService->getTemplateView($template);
+        $pdf = Pdf::loadView($templateView, compact('ticket'));
         $pdf->setPaper([0, 0, 595.28, 283.47]);
         
         // Save PDF to storage
@@ -202,6 +214,9 @@ class FlightController extends Controller
         }
         
         // Otherwise regenerate
+        $template = $flightTicket->template ?? 'generic';
+        $templateConfig = $this->templateService->getTemplateConfig($template);
+        
         $ticket = [
             'ticket_number' => $flightTicket->ticket_number,
             'booking_reference' => $flightTicket->booking_reference,
@@ -220,9 +235,12 @@ class FlightController extends Controller
             'price' => $flightTicket->price,
             'barcode' => $this->generateBarcode($flightTicket->ticket_number),
             'qr_code' => $this->generateQRCode($flightTicket->booking_reference),
+            'template' => $template,
+            'template_config' => $templateConfig,
         ];
         
-        $pdf = Pdf::loadView('flights.ticket-pdf', compact('ticket'));
+        $templateView = $this->templateService->getTemplateView($template);
+        $pdf = Pdf::loadView($templateView, compact('ticket'));
         $pdf->setPaper([0, 0, 595.28, 283.47]);
         
         return $pdf->download("ticket-{$flightTicket->booking_reference}.pdf");

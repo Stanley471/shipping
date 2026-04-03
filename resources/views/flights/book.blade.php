@@ -20,51 +20,51 @@
         </div>
 
         <div class="p-6 md:p-8">
-            <!-- Flight Info Card -->
-            <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 mb-6 border border-slate-200 dark:border-slate-700">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-xl">✈️</div>
-                        <div>
-                            <p class="font-semibold text-slate-900 dark:text-white">{{ $flight['airline'] ?? 'Unknown Airline' }}</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight_number'] ?? 'Unknown' }}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Editable Price -->
-                <div class="bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
-                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Ticket Price (USD)</label>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl font-bold text-slate-500">$</span>
-                        <input type="number" name="price" value="{{ $flight['price'] ?? 0 }}" min="1" max="99999"
-                            class="flex-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400 bg-transparent border-none focus:ring-0 p-0"
-                            required>
-                    </div>
-                </div>
-                
-                <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-slate-200 dark:border-slate-600">
-                    <div class="text-center">
-                        <p class="text-xl font-bold text-slate-900 dark:text-white">{{ $flight['departure_time'] }}</p>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['origin'] }}</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <svg class="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="text-center">
-                        <p class="text-xl font-bold text-slate-900 dark:text-white">{{ $flight['arrival_time'] }}</p>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['destination'] }}</p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Passenger Form -->
             <form action="{{ route('flights.ticket') }}" method="POST" class="space-y-6">
                 @csrf
+                
+                <!-- Flight Info Card -->
+                <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 mb-6 border border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-xl">✈️</div>
+                            <div>
+                                <p class="font-semibold text-slate-900 dark:text-white">{{ $flight['airline'] ?? 'Unknown Airline' }}</p>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight_number'] ?? 'Unknown' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Editable Price -->
+                    <div class="bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
+                        <label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Ticket Price (USD)</label>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl font-bold text-slate-500">$</span>
+                            <input type="number" name="price" value="{{ $flight['price'] ?? 500 }}" min="1" max="99999"
+                                class="flex-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400 bg-transparent border-none focus:ring-0 p-0"
+                                required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-slate-200 dark:border-slate-600">
+                        <div class="text-center">
+                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ $flight['departure_time'] }}</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['origin'] }}</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <svg class="w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ $flight['arrival_time'] }}</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['destination'] }}</p>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Hidden Flight Data -->
                 <input type="hidden" name="flight_number" value="{{ $flight['flight_number'] }}">

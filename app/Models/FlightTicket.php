@@ -26,6 +26,7 @@ class FlightTicket extends Model
         'gate',
         'class',
         'price',
+        'template',
         'pdf_path',
         'download_count',
         'last_downloaded_at',
