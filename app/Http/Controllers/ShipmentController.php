@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
 use App\Services\TrackingIdGenerator;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -126,5 +127,18 @@ class ShipmentController extends Controller
         ]);
 
         return redirect()->route('shipments.show', $shipment)->with('success', 'Shipment updated successfully.');
+    }
+
+    public function pdf(Shipment $shipment)
+    {
+        $this->authorize('view', $shipment);
+        
+        $shipment->load(['trackingUpdates' => function ($query) {
+            $query->orderBy('occurred_at', 'desc');
+        }]);
+        
+        $pdf = Pdf::loadView('shipments.pdf', compact('shipment'));
+        
+        return $pdf->download('shipment-' . $shipment->tracking_id . '.pdf');
     }
 }
