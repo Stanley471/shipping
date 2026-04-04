@@ -21,6 +21,41 @@ Route::post('/track', [TrackingController::class, 'search'])
     ->middleware('throttle:tracking')
     ->name('tracking.search');
 
+
+    Route::get('/preview/united-ticket', function () {
+        // Sample data matching your PDF template
+        $logoPath = public_path('images/airlines/united-logo.png');
+$logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+        $ticket = [
+            'passenger_name' => 'JOHN DOE',
+            'ticket_number' => '016-1234567890',
+            'booking_reference' => 'ABC123',
+            'flight_number' => 'UA123',
+            'airline' => 'United Airlines',
+            'origin' => 'JFK',
+            'destination' => 'LAX',
+            'departure_time' => '10:00 AM',
+            'arrival_time' => '01:30 PM',
+            'departure_date' => '2024-04-15',
+            'seat_class' => 'business',
+            'seat' => '4A',
+            'price' => 1250.00,
+            'taxes' => 125.00,
+            'total' => 1375.00,
+            'ff_number' => 'MP 12345678',
+            'date' => 'Apr 15, 2024',
+            'day' => 'Monday',
+            'origin_city' => 'New York',
+            'destination_city' => 'Los Angeles',
+            'class_code' => 'J',
+            'class' => 'Business',
+            'logo' => $logoBase64,
+        ];
+        
+        // Render as HTML (not PDF) for instant preview
+        return view('flights.templates.united-eticket', compact('ticket'));
+    })->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

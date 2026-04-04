@@ -8,7 +8,7 @@ use App\Services\FlightTemplateService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+
 
 class FlightController extends Controller
 {
@@ -99,7 +99,8 @@ class FlightController extends Controller
         $seatNumber = rand(1, 50) . chr(65 + rand(0, 5));
         $gate = 'T' . rand(1, 5) . '-' . rand(1, 50);
         $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600);
-        
+        $logoPath = public_path('images/airlines/united-logo.png');
+$logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
         // Detect template from airline
         $airlineCode = substr($validated['flight_number'], 0, 2); // Extract airline code from flight number
         $template = $this->templateService->getTemplateForAirline($airlineCode, null);
@@ -123,6 +124,7 @@ class FlightController extends Controller
             'class' => strtoupper($validated['seat_class']),
             'price' => $validated['price'],
             'template' => $template,
+            'logo' => $logoBase64,
         ]);
         
         $ticket = [
@@ -145,19 +147,8 @@ class FlightController extends Controller
             'qr_code' => $this->generateQRCode($bookingRef),
             'template' => $template,
             'template_config' => $templateConfig,
+            'logo' => $logoBase64,
         ];
-        
-        // Generate PDF with airline-specific template
-        $templateView = $this->templateService->getTemplateView($template);
-        $pdf = Pdf::loadView($templateView, compact('ticket'));
-        $pdf->setPaper([0, 0, 595.28, 283.47]);
-        
-        // Save PDF to storage
-        $filename = "tickets/{$bookingRef}.pdf";
-        Storage::disk('public')->put($filename, $pdf->output());
-        
-        // Update ticket with PDF path
-        $flightTicket->update(['pdf_path' => $filename]);
         
         return redirect()->route('flights.show', $flightTicket)
             ->with('success', 'Flight ticket generated successfully!');
@@ -205,17 +196,11 @@ class FlightController extends Controller
             'last_downloaded_at' => now(),
         ]);
         
-        // If PDF exists in storage, serve it
-        if ($flightTicket->pdf_path && Storage::disk('public')->exists($flightTicket->pdf_path)) {
-            return Storage::disk('public')->download(
-                $flightTicket->pdf_path,
-                "ticket-{$flightTicket->booking_reference}.pdf"
-            );
-        }
-        
-        // Otherwise regenerate
+        // Regenerate PDF on each download
         $template = $flightTicket->template ?? 'generic';
         $templateConfig = $this->templateService->getTemplateConfig($template);
+        $logoPath = public_path('images/airlines/united-logo.png');
+$logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
         
         $ticket = [
             'ticket_number' => $flightTicket->ticket_number,
@@ -237,11 +222,17 @@ class FlightController extends Controller
             'qr_code' => $this->generateQRCode($flightTicket->booking_reference),
             'template' => $template,
             'template_config' => $templateConfig,
+            'logo' => $logoBase64,
         ];
         
         $templateView = $this->templateService->getTemplateView($template);
         $pdf = Pdf::loadView($templateView, compact('ticket'));
-        $pdf->setPaper([0, 0, 595.28, 283.47]);
+        
+        if ($template === 'united') {
+            $pdf->setPaper('A4', 'portrait');
+        } else {
+            $pdf->setPaper([0, 0, 595.28, 283.47]);
+        }
         
         return $pdf->download("ticket-{$flightTicket->booking_reference}.pdf");
     }
@@ -253,11 +244,6 @@ class FlightController extends Controller
     {
         if ($flightTicket->user_id !== auth()->id()) {
             abort(403);
-        }
-        
-        // Delete PDF file
-        if ($flightTicket->pdf_path && Storage::disk('public')->exists($flightTicket->pdf_path)) {
-            Storage::disk('public')->delete($flightTicket->pdf_path);
         }
         
         $flightTicket->delete();

@@ -88,6 +88,9 @@ class FlightTemplateService
             'text_color' => '#FFFFFF',
             'logo_style' => 'bold uppercase',
             'barcode_position' => 'bottom',
+            'paper_size' => 'A4',
+            'orientation' => 'portrait',
+            'type' => 'eticket', // e-ticket receipt style
         ],
         'delta' => [
             'name' => 'Delta Air Lines',
@@ -234,6 +237,11 @@ class FlightTemplateService
      */
     public function getTemplateView(string $template): string
     {
+        // United uses special e-ticket template
+        if ($template === 'united') {
+            return 'flights.templates.united-eticket';
+        }
+        
         $view = "flights.templates.{$template}";
         
         // Check if specific template exists, otherwise use generic
