@@ -56,6 +56,27 @@ $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPa
         return view('flights.templates.united-eticket', compact('ticket'));
     })->middleware('auth');
 
+    Route::get('/preview/delta-ticket', function () {
+        $ticket = [
+            'passenger_name' => 'KATE ERONDIA CARLISLE',
+            'ticket_number' => '016-1234567890',
+            'booking_reference' => 'HCP8PG',
+            'flight_number' => 'DL547',
+            'airline' => 'Delta Air Lines',
+            'origin' => 'JAN',
+            'destination' => 'GRR',
+            'departure_time' => '15:02',
+            'arrival_time' => '23:02',
+            'date' => '2024-08-30',
+            'seat_class' => 'economy',
+            'seat' => '12A',
+            'price' => 425.00,
+            'class' => 'Economy',
+        ];
+        
+        return view('flights.templates.delta-eticket', compact('ticket'));
+    })->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -94,11 +94,14 @@ class FlightTemplateService
         ],
         'delta' => [
             'name' => 'Delta Air Lines',
-            'primary_color' => '#003366',
-            'accent_color' => '#C8102E',
-            'text_color' => '#FFFFFF',
-            'logo_style' => 'widget logo',
-            'barcode_position' => 'bottom',
+            'primary_color' => '#E31837',
+            'accent_color' => '#003087',
+            'text_color' => '#000000',
+            'logo_style' => 'red triangle',
+            'barcode_position' => 'none',
+            'paper_size' => 'A4',
+            'orientation' => 'portrait',
+            'type' => 'eticket',
         ],
         'american' => [
             'name' => 'American Airlines',
@@ -237,9 +240,13 @@ class FlightTemplateService
      */
     public function getTemplateView(string $template): string
     {
-        // United uses special e-ticket template
+        // E-ticket style templates
         if ($template === 'united') {
             return 'flights.templates.united-eticket';
+        }
+        
+        if ($template === 'delta') {
+            return 'flights.templates.delta-eticket';
         }
         
         $view = "flights.templates.{$template}";
