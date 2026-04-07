@@ -106,10 +106,13 @@ class FlightTemplateService
         'american' => [
             'name' => 'American Airlines',
             'primary_color' => '#0078D2',
-            'accent_color' => '#FFFFFF',
-            'text_color' => '#FFFFFF',
+            'accent_color' => '#E31837',
+            'text_color' => '#000000',
             'logo_style' => 'eagle logo',
-            'barcode_position' => 'right',
+            'barcode_position' => 'top-right',
+            'paper_size' => 'A4',
+            'orientation' => 'portrait',
+            'type' => 'eticket',
         ],
         'emirates' => [
             'name' => 'Emirates',
@@ -247,6 +250,10 @@ class FlightTemplateService
         
         if ($template === 'delta') {
             return 'flights.templates.delta-eticket';
+        }
+        
+        if ($template === 'american') {
+            return 'flights.templates.american-eticket';
         }
         
         $view = "flights.templates.{$template}";

@@ -77,6 +77,28 @@ $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPa
         return view('flights.templates.delta-eticket', compact('ticket'));
     })->middleware('auth');
 
+    Route::get('/preview/american-ticket', function () {
+        $ticket = [
+            'passenger_name' => 'ASHLEY MARTELLE',
+            'ticket_number' => '176-2143480036',
+            'booking_reference' => 'HG6NWJ',
+            'flight_number' => 'AA9279',
+            'airline' => 'American Airlines',
+            'origin' => 'SFO',
+            'destination' => 'SAN',
+            'departure_time' => '14:05',
+            'arrival_time' => '15:39',
+            'date' => '2024-03-02',
+            'return_date' => '2024-03-06',
+            'seat_class' => 'economy',
+            'seat' => '14C',
+            'price' => 385.00,
+            'class' => 'Economy',
+        ];
+        
+        return view('flights.templates.american-eticket', compact('ticket'));
+    })->middleware('auth');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
