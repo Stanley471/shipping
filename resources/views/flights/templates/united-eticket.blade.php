@@ -85,8 +85,8 @@
             color: #000;
         }
         .confirmation-box .conf-code {
-            font-size: 22pt;
-            font-weight: 700;
+            font-size: 13pt;
+            font-weight: 600;
             color: #000;
             letter-spacing: 1pt;
             line-height: 1.1;
