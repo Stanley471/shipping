@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
 class User extends Authenticatable
@@ -64,5 +65,34 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function coins(): HasOne
+    {
+        return $this->hasOne(UserCoin::class);
+    }
+
+    public function coinTransactions(): HasMany
+    {
+        return $this->hasMany(CoinTransaction::class);
+    }
+
+    public function coinPurchases(): HasMany
+    {
+        return $this->hasMany(CoinPurchase::class);
+    }
+
+    // Helper to get or create coin balance
+    public function getCoinBalance(): int
+    {
+        if (!$this->coins) {
+            $this->coins()->create([
+                'balance' => 0,
+                'total_earned' => 0,
+                'total_spent' => 0,
+            ]);
+            $this->load('coins');
+        }
+        return $this->coins->balance;
     }
 }

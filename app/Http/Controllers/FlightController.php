@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FlightTicket;
 use App\Services\FlightApiService;
 use App\Services\FlightTemplateService;
+use App\Services\CoinService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -14,11 +15,13 @@ class FlightController extends Controller
 {
     protected FlightApiService $flightApi;
     protected FlightTemplateService $templateService;
+    protected CoinService $coinService;
     
-    public function __construct(FlightApiService $flightApi, FlightTemplateService $templateService)
+    public function __construct(FlightApiService $flightApi, FlightTemplateService $templateService, CoinService $coinService)
     {
         $this->flightApi = $flightApi;
         $this->templateService = $templateService;
+        $this->coinService = $coinService;
         $this->middleware('auth');
     }
     
@@ -93,65 +96,105 @@ class FlightController extends Controller
             'price' => 'required|numeric|min:1|max:999999',
         ]);
         
-        // Generate random ticket details
-        $ticketNumber = 'TKT' . strtoupper(Str::random(8));
-        $bookingRef = strtoupper(Str::random(6));
-        $seatNumber = rand(1, 50) . chr(65 + rand(0, 5));
-        $gate = 'T' . rand(1, 5) . '-' . rand(1, 50);
-        $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600);
-        $logoPath = public_path('images/airlines/united-logo.png');
-$logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
-        // Detect template from airline
-        $airlineCode = substr($validated['flight_number'], 0, 2); // Extract airline code from flight number
-        $template = $this->templateService->getTemplateForAirline($airlineCode, null);
-        $templateConfig = $this->templateService->getTemplateConfig($template);
+        // Check if user has enough coins
+        $user = auth()->user();
+        if (!$this->coinService->canAffordService($user, 'flight_ticket')) {
+            $cost = $this->coinService->getServiceCost('flight_ticket');
+            $balance = $this->coinService->getBalance($user);
+            return back()->with('error', "Insufficient coins. This service costs {$cost} coins. Your balance: {$balance} coins. Please buy more coins.");
+        }
         
-        // Save to database
-        $flightTicket = FlightTicket::create([
-            'user_id' => auth()->id(),
-            'ticket_number' => $ticketNumber,
-            'booking_reference' => $bookingRef,
-            'passenger_name' => strtoupper($validated['passenger_name']),
-            'flight_number' => $validated['flight_number'],
-            'airline' => $validated['airline'],
-            'origin' => $validated['origin'],
-            'destination' => $validated['destination'],
-            'flight_date' => $validated['date'],
-            'departure_time' => $validated['departure_time'],
-            'arrival_time' => $validated['arrival_time'],
-            'seat' => $seatNumber,
-            'gate' => $gate,
-            'class' => strtoupper($validated['seat_class']),
-            'price' => $validated['price'],
-            'template' => $template,
-            'logo' => $logoBase64,
-        ]);
+        // Deduct coins first
+        $paymentTx = $this->coinService->payForService(
+            $user,
+            'flight_ticket',
+            'Flight ticket generation - ' . $validated['flight_number'],
+            null
+        );
         
-        $ticket = [
-            'ticket_number' => $ticketNumber,
-            'booking_reference' => $bookingRef,
-            'passenger_name' => strtoupper($validated['passenger_name']),
-            'flight_number' => $validated['flight_number'],
-            'airline' => $validated['airline'],
-            'origin' => $validated['origin'],
-            'destination' => $validated['destination'],
-            'date' => $validated['date'],
-            'departure_time' => $validated['departure_time'],
-            'arrival_time' => $validated['arrival_time'],
-            'boarding_time' => $boardingTime,
-            'seat' => $seatNumber,
-            'gate' => $gate,
-            'class' => strtoupper($validated['seat_class']),
-            'price' => $validated['price'],
-            'barcode' => $this->generateBarcode($ticketNumber),
-            'qr_code' => $this->generateQRCode($bookingRef),
-            'template' => $template,
-            'template_config' => $templateConfig,
-            'logo' => $logoBase64,
-        ];
+        if (!$paymentTx) {
+            return back()->with('error', 'Payment failed. Please try again.');
+        }
         
-        return redirect()->route('flights.show', $flightTicket)
-            ->with('success', 'Flight ticket generated successfully!');
+        try {
+            // Generate random ticket details
+            $ticketNumber = 'TKT' . strtoupper(Str::random(8));
+            $bookingRef = strtoupper(Str::random(6));
+            $seatNumber = rand(1, 50) . chr(65 + rand(0, 5));
+            $gate = 'T' . rand(1, 5) . '-' . rand(1, 50);
+            $boardingTime = date('H:i', strtotime($validated['departure_time']) - 3600);
+            $logoPath = public_path('images/airlines/united-logo.png');
+            $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+            
+            // Detect template from airline
+            $airlineCode = substr($validated['flight_number'], 0, 2);
+            $template = $this->templateService->getTemplateForAirline($airlineCode, null);
+            $templateConfig = $this->templateService->getTemplateConfig($template);
+            
+            // Save to database
+            $flightTicket = FlightTicket::create([
+                'user_id' => auth()->id(),
+                'ticket_number' => $ticketNumber,
+                'booking_reference' => $bookingRef,
+                'passenger_name' => strtoupper($validated['passenger_name']),
+                'flight_number' => $validated['flight_number'],
+                'airline' => $validated['airline'],
+                'origin' => $validated['origin'],
+                'destination' => $validated['destination'],
+                'flight_date' => $validated['date'],
+                'departure_time' => $validated['departure_time'],
+                'arrival_time' => $validated['arrival_time'],
+                'seat' => $seatNumber,
+                'gate' => $gate,
+                'class' => strtoupper($validated['seat_class']),
+                'price' => $validated['price'],
+                'template' => $template,
+                'logo' => $logoBase64,
+            ]);
+            
+            $ticket = [
+                'ticket_number' => $ticketNumber,
+                'booking_reference' => $bookingRef,
+                'passenger_name' => strtoupper($validated['passenger_name']),
+                'flight_number' => $validated['flight_number'],
+                'airline' => $validated['airline'],
+                'origin' => $validated['origin'],
+                'destination' => $validated['destination'],
+                'date' => $validated['date'],
+                'departure_time' => $validated['departure_time'],
+                'arrival_time' => $validated['arrival_time'],
+                'boarding_time' => $boardingTime,
+                'seat' => $seatNumber,
+                'gate' => $gate,
+                'class' => strtoupper($validated['seat_class']),
+                'price' => $validated['price'],
+                'barcode' => $this->generateBarcode($ticketNumber),
+                'qr_code' => $this->generateQRCode($bookingRef),
+                'template' => $template,
+                'template_config' => $templateConfig,
+                'logo' => $logoBase64,
+            ];
+            
+            return redirect()->route('flights.show', $flightTicket)
+                ->with('success', 'Flight ticket generated successfully!');
+                
+        } catch (\Exception $e) {
+            // Refund coins on failure
+            $cost = $this->coinService->getServiceCost('flight_ticket');
+            $this->coinService->refundCoins(
+                $user,
+                $cost,
+                'Refund for failed ticket generation - ' . $validated['flight_number'],
+                $paymentTx?->id
+            );
+            
+            \Log::error('Ticket generation failed, coins refunded', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+            
+            return back()->with('error', 'Ticket generation failed. Your coins have been refunded.');
+        }
     }
     
     /**

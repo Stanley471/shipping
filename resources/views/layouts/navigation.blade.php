@@ -23,6 +23,23 @@
                 </div>
             </div>
 
+            <!-- Coins Balance -->
+            @auth
+            <div class="hidden sm:flex sm:items-center sm:mr-4">
+                <a href="{{ route('coins.index') }}" class="flex items-center px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-full text-sm">
+                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                    </svg>
+                    <span class="font-medium text-indigo-700 dark:text-indigo-300">
+                        {{ number_format(auth()->user()->getCoinBalance()) }} coins
+                    </span>
+                </a>
+                <a href="{{ route('coins.buy') }}" class="ml-2 text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400">
+                    + Buy
+                </a>
+            </div>
+            @endauth
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -82,6 +99,9 @@
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="mt-1 text-sm text-indigo-600 dark:text-indigo-400">
+                    {{ number_format(auth()->user()->getCoinBalance()) }} coins
+                </div>
             </div>
 
             <div class="mt-3 space-y-1">

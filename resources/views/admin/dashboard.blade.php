@@ -46,6 +46,7 @@
                     <div class="flex gap-3 mt-2">
                         <a href="{{ route('admin.users.index') }}" class="text-sm text-white font-medium hover:text-purple-100 underline underline-offset-2">Users</a>
                         <a href="{{ route('admin.shipments.index') }}" class="text-sm text-white font-medium hover:text-purple-100 underline underline-offset-2">Shipments</a>
+                        <a href="{{ route('admin.coins.dashboard') }}" class="text-sm text-white font-medium hover:text-purple-100 underline underline-offset-2">Coins</a>
                     </div>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">

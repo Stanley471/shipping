@@ -6,6 +6,8 @@ use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\CoinController;
+use App\Http\Controllers\Admin\CoinAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -119,11 +121,31 @@ Route::middleware('auth')->group(function () {
     Route::delete('/flights/ticket/{flightTicket}', [FlightController::class, 'destroy'])->name('flights.destroy');
     Route::get('/api/airports', [FlightController::class, 'autocompleteAirports'])->name('api.airports');
 
+    // Coin Routes
+    Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
+    Route::get('/coins/buy', [CoinController::class, 'buyForm'])->name('coins.buy');
+    Route::post('/coins/buy', [CoinController::class, 'buy']);
+
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('users.index');
         Route::post('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
         Route::get('/shipments', [AdminController::class, 'shipments'])->name('shipments.index');
+        
+        // Admin Coin Routes
+        Route::get('/coins', [CoinAdminController::class, 'dashboard'])->name('coins.dashboard');
+        Route::get('/coins/pending', [CoinAdminController::class, 'pendingPurchases'])->name('coins.pending');
+        Route::post('/coins/purchases/{purchase}/approve', [CoinAdminController::class, 'approvePurchase'])->name('coins.purchases.approve');
+        Route::post('/coins/purchases/{purchase}/reject', [CoinAdminController::class, 'rejectPurchase'])->name('coins.purchases.reject');
+        Route::get('/coins/adjustment', [CoinAdminController::class, 'adjustmentForm'])->name('coins.adjustment');
+        Route::post('/coins/adjustment', [CoinAdminController::class, 'adjustment']);
+        Route::get('/coins/transactions', [CoinAdminController::class, 'transactions'])->name('coins.transactions');
+        Route::get('/coins/services', [CoinAdminController::class, 'services'])->name('coins.services');
+        Route::patch('/coins/services/{service}', [CoinAdminController::class, 'updateService'])->name('coins.services.update');
+        Route::get('/coins/bank-accounts', [CoinAdminController::class, 'bankAccounts'])->name('coins.bank_accounts');
+        Route::post('/coins/bank-accounts', [CoinAdminController::class, 'addBankAccount']);
+        Route::patch('/coins/bank-accounts/{account}', [CoinAdminController::class, 'updateBankAccount']);
+        Route::delete('/coins/bank-accounts/{account}', [CoinAdminController::class, 'deleteBankAccount']);
     });
 });
 
