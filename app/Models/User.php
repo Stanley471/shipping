@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_vendor',
         'is_active',
     ];
 
@@ -49,6 +50,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_vendor' => 'boolean',
             'is_active' => 'boolean',
         ];
     }
@@ -94,5 +96,17 @@ class User extends Authenticatable
             $this->load('coins');
         }
         return $this->coins->balance;
+    }
+
+    // Check if user is a vendor (admins are automatically vendors)
+    public function isVendor(): bool
+    {
+        return $this->is_vendor || $this->isAdmin();
+    }
+
+    // Get vendor bank account
+    public function vendorBankAccount(): HasOne
+    {
+        return $this->hasOne(AdminBankAccount::class);
     }
 }

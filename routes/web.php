@@ -7,6 +7,7 @@ use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\CoinController;
+use App\Http\Controllers\VendorController;
 use App\Http\Controllers\Admin\CoinAdminController;
 
 Route::get('/', function () {
@@ -127,10 +128,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/coins/buy', [CoinController::class, 'buy']);
     Route::get('/coins/orders', [CoinController::class, 'orders'])->name('coins.orders');
 
+    // Vendor Routes
+    Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])->name('vendor.dashboard');
+    Route::get('/vendor/setup', [VendorController::class, 'setup'])->name('vendor.setup');
+    Route::post('/vendor/setup', [VendorController::class, 'store']);
+    Route::get('/vendor/profile', [VendorController::class, 'edit'])->name('vendor.edit');
+    Route::put('/vendor/profile', [VendorController::class, 'update'])->name('vendor.update');
+    Route::get('/vendor/orders', [VendorController::class, 'orders'])->name('vendor.orders');
+
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('users.index');
         Route::post('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::post('/users/{user}/toggle-vendor', [AdminController::class, 'toggleVendorStatus'])->name('users.toggle-vendor');
         Route::get('/shipments', [AdminController::class, 'shipments'])->name('shipments.index');
         
         // Admin Coin Routes

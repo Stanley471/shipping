@@ -60,15 +60,15 @@
             <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                        <span class="text-lg font-bold text-emerald-600 dark:text-emerald-400">{{ substr($vendor->account_name, 0, 1) }}</span>
+                        <span class="text-lg font-bold text-emerald-600 dark:text-emerald-400">{{ substr($vendor->display_name, 0, 1) }}</span>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-900 dark:text-white">{{ $vendor->account_name }}</h3>
+                        <h3 class="font-semibold text-slate-900 dark:text-white">{{ $vendor->display_name }}</h3>
                         <p class="text-sm text-slate-500 dark:text-slate-400">{{ $vendor->bank_name }}</p>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="text-xl font-bold text-slate-900 dark:text-white">₦1.00</p>
+                    <p class="text-xl font-bold text-slate-900 dark:text-white">₦{{ number_format($vendor->rate, 2) }}</p>
                     <p class="text-xs text-slate-500">per coin</p>
                 </div>
             </div>
@@ -76,39 +76,50 @@
             {{-- Vendor Stats --}}
             <div class="flex items-center gap-4 mb-4 text-sm">
                 <div class="flex items-center gap-1">
-                    <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-slate-600 dark:text-slate-300">N/A</span>
+                    @if($vendor->rating > 0)
+                        <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span class="text-slate-600 dark:text-slate-300">{{ $vendor->rating }}</span>
+                    @else
+                        <span class="text-slate-400">★ N/A</span>
+                    @endif
                 </div>
                 <div class="flex items-center gap-1">
                     <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
-                    <span class="text-slate-600 dark:text-slate-300">{{ rand(50, 500) }} sales</span>
+                    <span class="text-slate-600 dark:text-slate-300">{{ number_format($vendor->total_sales) }} sales</span>
                 </div>
                 <div class="flex items-center gap-1">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span class="text-slate-600 dark:text-slate-300">~20 mins</span>
+                    <span class="text-slate-600 dark:text-slate-300">~{{ $vendor->avg_response_time }} mins</span>
                 </div>
             </div>
+
+            {{-- Vendor Info --}}
+            @if($vendor->vendor_info)
+            <div class="mb-4">
+                <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{{ $vendor->vendor_info }}</p>
+            </div>
+            @endif
 
             {{-- Available Balance --}}
             <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm text-slate-600 dark:text-slate-400">Available</span>
-                    <span class="font-semibold text-slate-900 dark:text-white">{{ number_format($vendor->max_limit ?? 100000) }} coins</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">{{ number_format($vendor->max_limit) }} coins</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-slate-600 dark:text-slate-400">Minimum</span>
-                    <span class="font-semibold text-slate-900 dark:text-white">{{ number_format($vendor->min_limit ?? 100) }} coins</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">{{ number_format($vendor->min_limit) }} coins</span>
                 </div>
             </div>
 
             {{-- Buy Button --}}
-            <button onclick="openBuyModal({{ $vendor->id }}, '{{ $vendor->account_name }}', '{{ $vendor->bank_name }}', '{{ $vendor->account_number }}', {{ $vendor->min_limit ?? 100 }}, {{ $vendor->max_limit ?? 100000 }})" 
+            <button onclick="openBuyModal({{ $vendor->id }}, '{{ $vendor->display_name }}', '{{ $vendor->bank_name }}', '{{ $vendor->account_number }}', {{ $vendor->min_limit }}, {{ $vendor->max_limit }}, {{ $vendor->rate }}, '{{ $vendor->vendor_notes }}')" 
                 class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors"
                 {{ $hasActiveOrder ? 'disabled' : '' }}>
                 Buy
@@ -160,9 +171,7 @@
                     <div class="flex-1">
                         <p class="font-medium text-slate-900 dark:text-white" id="modal-vendor-fullname"></p>
                         <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span>₦1.00 per coin</span>
-                            <span>•</span>
-                            <span class="text-amber-500">★ N/A</span>
+                            <span id="modal-rate">₦1.00 per coin</span>
                         </div>
                     </div>
                 </div>
@@ -197,7 +206,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-slate-600 dark:text-slate-400">Rate</span>
-                        <span class="font-medium text-slate-900 dark:text-white">₦1.00/coin</span>
+                        <span class="font-medium text-slate-900 dark:text-white" id="summary-rate">₦1.00/coin</span>
                     </div>
                     <div class="border-t border-slate-200 dark:border-slate-600 pt-2 mt-2">
                         <div class="flex justify-between">
@@ -223,10 +232,16 @@
                     </div>
                 </div>
 
+                {{-- Vendor Notes --}}
+                <div id="vendor-notes-section" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                    <h4 class="font-medium text-amber-900 dark:text-amber-100 mb-2">Vendor Instructions</h4>
+                    <p class="text-sm text-amber-800 dark:text-amber-200" id="modal-vendor-notes"></p>
+                </div>
+
                 {{-- Instructions --}}
-                <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-                    <h4 class="font-medium text-amber-900 dark:text-amber-100 mb-2">Payment Instructions</h4>
-                    <ol class="text-sm text-amber-800 dark:text-amber-200 space-y-1 list-decimal list-inside">
+                <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4">
+                    <h4 class="font-medium text-emerald-900 dark:text-emerald-100 mb-2">Payment Instructions</h4>
+                    <ol class="text-sm text-emerald-800 dark:text-emerald-200 space-y-1 list-decimal list-inside">
                         <li>Transfer the exact amount to the vendor's account</li>
                         <li>Take a screenshot of the payment receipt</li>
                         <li>Upload the screenshot below</li>
@@ -266,9 +281,11 @@
 
 <script>
     let currentVendor = null;
+    let currentRate = 1.00;
 
-    function openBuyModal(id, name, bank, account, min, max) {
+    function openBuyModal(id, name, bank, account, min, max, rate = 1.00, notes = '') {
         currentVendor = { id, name, bank, account, min, max };
+        currentRate = rate;
         
         document.getElementById('modal-vendor-id').value = id;
         document.getElementById('modal-vendor-name').textContent = name;
@@ -279,6 +296,17 @@
         document.getElementById('modal-account-name').textContent = name;
         document.getElementById('modal-min').textContent = min.toLocaleString();
         document.getElementById('modal-max').textContent = max.toLocaleString();
+        document.getElementById('modal-rate').textContent = '₦' + rate.toFixed(2) + '/coin';
+        document.getElementById('summary-rate').textContent = '₦' + rate.toFixed(2) + '/coin';
+        
+        // Show vendor notes if available
+        const notesSection = document.getElementById('vendor-notes-section');
+        if (notes && notes.trim()) {
+            document.getElementById('modal-vendor-notes').textContent = notes;
+            notesSection.classList.remove('hidden');
+        } else {
+            notesSection.classList.add('hidden');
+        }
         
         document.getElementById('buy-modal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -296,8 +324,9 @@
 
     function updateSummary() {
         const amount = parseInt(document.getElementById('amount-input').value) || 0;
+        const total = amount * currentRate;
         document.getElementById('summary-coins').textContent = amount.toLocaleString() + ' coins';
-        document.getElementById('summary-total').textContent = '₦' + amount.toLocaleString();
+        document.getElementById('summary-total').textContent = '₦' + total.toLocaleString();
     }
 
     document.getElementById('amount-input').addEventListener('input', updateSummary);

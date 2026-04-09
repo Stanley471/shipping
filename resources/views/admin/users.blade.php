@@ -19,7 +19,8 @@
                     <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Email</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Role</th>
                     <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Action</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Vendor</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
@@ -47,13 +48,33 @@
                         @endif
                     </td>
                     <td class="px-6 py-4">
+                        @if($user->is_vendor)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400">
+                                ✓ Vendor
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-400">
+                                User
+                            </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 space-y-2">
                         @if($user->id !== auth()->id())
-                            <form method="POST" action="{{ route('admin.users.toggle', $user) }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-sm font-medium {{ $user->is_active ? 'text-red-600 dark:text-red-400 hover:text-red-800' : 'text-green-600 dark:text-green-400 hover:text-green-800' }} transition-colors">
-                                    {{ $user->is_active ? 'Suspend' : 'Activate' }}
-                                </button>
-                            </form>
+                            <div class="flex gap-3">
+                                <form method="POST" action="{{ route('admin.users.toggle', $user) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-sm font-medium {{ $user->is_active ? 'text-red-600 dark:text-red-400 hover:text-red-800' : 'text-green-600 dark:text-green-400 hover:text-green-800' }} transition-colors">
+                                        {{ $user->is_active ? 'Suspend' : 'Activate' }}
+                                    </button>
+                                </form>
+                                <span class="text-slate-300">|</span>
+                                <form method="POST" action="{{ route('admin.users.toggle-vendor', $user) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-sm font-medium {{ $user->is_vendor ? 'text-amber-600 dark:text-amber-400 hover:text-amber-800' : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-800' }} transition-colors">
+                                        {{ $user->is_vendor ? 'Remove Vendor' : 'Make Vendor' }}
+                                    </button>
+                                </form>
+                            </div>
                         @else
                             <span class="text-slate-400 text-sm">You</span>
                         @endif

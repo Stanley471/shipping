@@ -41,4 +41,25 @@ class AdminController extends Controller
         $shipments = Shipment::with('user')->latest()->paginate(20);
         return view('admin.shipments', compact('shipments'));
     }
+
+    /**
+     * Toggle vendor status for a user
+     */
+    public function toggleVendorStatus(User $user)
+    {
+        $user->is_vendor = ! $user->is_vendor;
+        $user->save();
+
+        $status = $user->is_vendor ? 'approved as vendor' : 'removed as vendor';
+        
+        if ($user->is_vendor) {
+            return back()->with('success', "User has been {$status}. They can now set up their vendor profile at /vendor/setup");
+        } else {
+            // Deactivate their bank account too
+            if ($user->vendorBankAccount) {
+                $user->vendorBankAccount->update(['is_active' => false]);
+            }
+            return back()->with('success', "User has been {$status}. Their vendor account has been deactivated.");
+        }
+    }
 }
