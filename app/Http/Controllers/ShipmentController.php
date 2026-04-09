@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ShipmentCreated;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
+use App\Services\CoinService;
 use App\Services\TrackingIdGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -30,6 +31,14 @@ class ShipmentController extends Controller
         // Check if user is suspended
         if (! Auth::user()->is_active) {
             return back()->with('error', 'Your account is suspended. You cannot create new shipments.');
+        }
+
+        // Check for coin payment for creating shipment
+        $coinService = app(CoinService::class);
+        $serviceCost = $coinService->getServiceCost('create_shipment');
+        
+        if ($serviceCost > 0 && ! $coinService->canAfford(Auth::user(), $serviceCost)) {
+            return back()->with('error', "Insufficient coins. You need {$serviceCost} coins to create a shipment. Please purchase coins.");
         }
 
         $validated = $request->validate([
@@ -75,6 +84,16 @@ class ShipmentController extends Controller
             'progress' => $validated['progress'],
             'occurred_at' => $validated['occurred_at'],
         ]);
+
+        // Deduct coins for creating shipment
+        if ($serviceCost > 0) {
+            $coinService->payForService(
+                Auth::user(),
+                'create_shipment',
+                "Created shipment: {$shipment->tracking_id}",
+                "SHIPMENT:{$shipment->id}"
+            );
+        }
 
         // Send email notifications if requested
         if ($request->boolean('send_email')) {
