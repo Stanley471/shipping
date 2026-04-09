@@ -125,6 +125,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
     Route::get('/coins/buy', [CoinController::class, 'buyForm'])->name('coins.buy');
     Route::post('/coins/buy', [CoinController::class, 'buy']);
+    Route::get('/coins/orders', [CoinController::class, 'orders'])->name('coins.orders');
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

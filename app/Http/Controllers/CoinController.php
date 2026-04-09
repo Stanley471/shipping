@@ -40,18 +40,23 @@ class CoinController extends Controller
     }
 
     /**
-     * Show buy coins form
+     * Show P2P marketplace (buy coins)
      */
     public function buyForm()
     {
-        $bankAccounts = AdminBankAccount::getActiveOrdered();
+        $vendors = AdminBankAccount::getActiveOrdered();
         
-        if ($bankAccounts->isEmpty()) {
+        if ($vendors->isEmpty()) {
             return redirect()->route('coins.index')
                 ->with('error', 'Coin purchases are temporarily unavailable. Please try again later.');
         }
 
-        return view('coins.buy', compact('bankAccounts'));
+        // Check if user has active pending order
+        $hasActiveOrder = auth()->user()->coinPurchases()
+            ->where('status', 'pending')
+            ->exists();
+
+        return view('coins.p2p_marketplace', compact('vendors', 'hasActiveOrder'));
     }
 
     /**
@@ -85,6 +90,18 @@ class CoinController extends Controller
 
         return redirect()->route('coins.index')
             ->with('success', 'Payment submitted successfully! Your coins will be credited after admin verification.');
+    }
+
+    /**
+     * Show user's P2P orders
+     */
+    public function orders()
+    {
+        $orders = auth()->user()->coinPurchases()
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return view('coins.orders', compact('orders'));
     }
 
     /**
