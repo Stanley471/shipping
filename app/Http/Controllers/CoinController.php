@@ -31,6 +31,7 @@ class CoinController extends Controller
             ->paginate(20);
             
         $purchases = $user->coinPurchases()
+            ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
