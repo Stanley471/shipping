@@ -135,6 +135,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendor/profile', [VendorController::class, 'edit'])->name('vendor.edit');
     Route::put('/vendor/profile', [VendorController::class, 'update'])->name('vendor.update');
     Route::get('/vendor/orders', [VendorController::class, 'orders'])->name('vendor.orders');
+    Route::post('/vendor/orders/{order}/confirm', [VendorController::class, 'confirmOrder'])->name('vendor.confirm');
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

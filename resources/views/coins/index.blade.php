@@ -24,36 +24,7 @@
                 </div>
             </div>
 
-            {{-- Pending Purchases --}}
-            @if($purchases->count() > 0)
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Pending Purchases</h3>
-                </div>
-                <div class="p-6">
-                    <div class="space-y-4">
-                        @foreach($purchases as $purchase)
-                        <div class="flex items-center justify-between p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                            <div>
-                                <p class="font-medium text-gray-900 dark:text-gray-100">
-                                    {{ number_format($purchase->amount_coins) }} coins
-                                </p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    ₦{{ number_format($purchase->amount_naira) }} • {{ $purchase->bank_name }}
-                                </p>
-                                <p class="text-xs text-gray-500">
-                                    Submitted {{ $purchase->created_at->diffForHumans() }}
-                                </p>
-                            </div>
-                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                Pending
-                            </span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            @endif
+        
 
             {{-- Pending Purchases --}}
             @if($purchases->count() > 0)
