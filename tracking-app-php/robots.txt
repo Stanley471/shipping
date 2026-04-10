@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /result.php
+
+# Disallow cache directory
+Disallow: /cache/
+
+Sitemap: https://yourtrackingdomain.com/sitemap.xml

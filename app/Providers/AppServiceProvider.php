@@ -24,10 +24,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
         Gate::policy(Shipment::class, \App\Policies\ShipmentPolicy::class);
+        
+        // Rate limiter for web tracking form (existing)
         RateLimiter::for('tracking', function (Request $request) {
             return Limit::perMinute(10)->by($request->ip());
+        });
+        
+        // Rate limiter for public API tracking (more strict)
+        // Limits to 30 requests per minute per IP
+        RateLimiter::for('public-tracking', function (Request $request) {
+            return Limit::perMinute(30)->by($request->ip());
         });
     }
 }
