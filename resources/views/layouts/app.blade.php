@@ -154,13 +154,32 @@
             <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleMobileSidebar()"></div>
             <div id="mobile-sidebar" class="absolute left-0 top-0 h-full w-72 bg-white dark:bg-slate-900 transform -translate-x-full transition-transform duration-300">
                 <div class="flex flex-col h-full">
-                    <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                        <span class="text-lg font-bold text-slate-900 dark:text-white">Menu</span>
-                        <button onclick="toggleMobileSidebar()" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    <!-- Coin Balance Card - Mobile Sidebar (Top) -->
+                    <div class="p-4 bg-gradient-to-r from-amber-500 to-amber-600">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-white">Menu</span>
+                            <button onclick="toggleMobileSidebar()" class="p-2 rounded-lg text-amber-100 hover:text-white hover:bg-white/20 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <a href="{{ route('coins.index') }}" class="flex items-center justify-between p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-white/30 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-amber-100 font-medium">Your Balance</p>
+                                    <p class="text-xl font-bold text-white">{{ number_format(Auth::user()->getCoinBalance()) }} coins</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
-                        </button>
+                        </a>
                     </div>
                     
                     <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
@@ -249,6 +268,26 @@
                 </div>
                 
                 <div class="flex items-center gap-3">
+                    <!-- Coin Balance - Desktop -->
+                    <a href="{{ route('coins.index') }}" class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-amber-50 dark:bg-amber-900/30 rounded-full border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors">
+                        <svg class="w-4 h-4 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm font-medium text-amber-700 dark:text-amber-300">
+                            {{ number_format(Auth::user()->getCoinBalance()) }}
+                        </span>
+                    </a>
+                    
+                    <!-- Coin Balance - Mobile (icon + number) -->
+                    <a href="{{ route('coins.index') }}" class="md:hidden flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-50 dark:bg-amber-900/30 rounded-full border border-amber-200 dark:border-amber-800">
+                        <svg class="w-4 h-4 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                            {{ number_format(Auth::user()->getCoinBalance()) }}
+                        </span>
+                    </a>
+                    
                     <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                         <svg id="sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
