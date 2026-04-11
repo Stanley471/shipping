@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminBankAccount;
 use App\Models\CoinPurchase;
+use App\Services\ReferralService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -193,6 +194,14 @@ class VendorController extends Controller
         $buyerCoinBalance->balance += $order->amount_coins;
         $buyerCoinBalance->total_earned += $order->amount_coins;
         $buyerCoinBalance->save();
+
+        // Process referral commission
+        $referralService = app(ReferralService::class);
+        try {
+            $referralService->processPurchaseCommission($order);
+        } catch (\Exception $e) {
+            \Log::error('Referral commission failed', ['order_id' => $order->id, 'error' => $e->getMessage()]);
+        }
 
         return back()->with('success', 'Order confirmed and coins credited to buyer.');
     }

@@ -8,7 +8,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\CoinController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\Admin\CoinAdminController;
+use App\Http\Controllers\Admin\ReferralAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -137,6 +139,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendor/orders', [VendorController::class, 'orders'])->name('vendor.orders');
     Route::post('/vendor/orders/{order}/confirm', [VendorController::class, 'confirmOrder'])->name('vendor.confirm');
 
+    // Referral Routes
+    Route::get('/referrals', [ReferralController::class, 'index'])->name('referrals.index');
+    Route::get('/referrals/transactions', [ReferralController::class, 'transactions'])->name('referrals.transactions');
+    Route::post('/referrals/convert', [ReferralController::class, 'convert'])->name('referrals.convert');
+    Route::post('/referrals/withdraw', [ReferralController::class, 'withdraw'])->name('referrals.withdraw');
+
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'users'])->name('users.index');
@@ -158,6 +166,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/coins/bank-accounts', [CoinAdminController::class, 'addBankAccount']);
         Route::patch('/coins/bank-accounts/{account}', [CoinAdminController::class, 'updateBankAccount']);
         Route::delete('/coins/bank-accounts/{account}', [CoinAdminController::class, 'deleteBankAccount']);
+        
+        // Admin Referral Routes
+        Route::get('/referrals/settings', [ReferralAdminController::class, 'settings'])->name('referrals.settings');
+        Route::post('/referrals/settings', [ReferralAdminController::class, 'updateSettings']);
+        Route::get('/referrals/statistics', [ReferralAdminController::class, 'statistics'])->name('referrals.statistics');
+        Route::get('/referrals/withdrawals', [ReferralAdminController::class, 'withdrawals'])->name('referrals.withdrawals');
+        Route::post('/referrals/withdrawals/{transaction}/approve', [ReferralAdminController::class, 'approveWithdrawal'])->name('referrals.approve');
+        Route::post('/referrals/withdrawals/{transaction}/reject', [ReferralAdminController::class, 'rejectWithdrawal'])->name('referrals.reject');
+        Route::get('/referrals/transactions', [ReferralAdminController::class, 'transactions'])->name('referrals.transactions');
     });
 });
 

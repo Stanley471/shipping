@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\ReferralService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,8 +19,13 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        // Store referral code in session if provided
+        if ($request->has('ref')) {
+            session(['referral_code' => $request->input('ref')]);
+        }
+        
         return view('auth.register');
     }
 
@@ -41,6 +47,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Process referral
+        $referralService = app(ReferralService::class);
+        $referralCode = session('referral_code') ?? $request->input('referral_code');
+        $referralService->processSignup($user, $referralCode);
+        
+        // Clear session
+        session()->forget('referral_code');
 
         event(new Registered($user));
 

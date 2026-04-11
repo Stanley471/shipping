@@ -4,7 +4,11 @@
  */
 
 // Main app API base URL (where your Laravel app is hosted)
-define('API_BASE_URL', 'https://yourmainapp.com/api/public');
+// FOR LOCALHOST XAMPP (your current setup):
+define('API_BASE_URL', 'http://localhost/shipping/public/api/public');
+
+// Alternative if using php artisan serve:
+// define('API_BASE_URL', 'http://localhost:8000/api/public');
 
 // App name
 define('APP_NAME', 'Cargo Tracking');
