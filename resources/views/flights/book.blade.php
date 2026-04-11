@@ -24,14 +24,18 @@
             <form action="{{ route('flights.ticket') }}" method="POST" class="space-y-6">
                 @csrf
                 
-                <!-- Flight Info Card -->
+                <!-- Flight Info Card - United Airlines -->
                 <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 mb-6 border border-slate-200 dark:border-slate-700">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-xl">✈️</div>
+                            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
                             <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">{{ $flight['airline'] ?? 'Unknown Airline' }}</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight_number'] ?? 'Unknown' }}</p>
+                                <p class="font-semibold text-slate-900 dark:text-white">United Airlines</p>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight_number'] ?? 'UA0000' }}</p>
                             </div>
                         </div>
                     </div>
@@ -66,9 +70,9 @@
                     </div>
                 </div>
                 
-                <!-- Hidden Flight Data -->
+                <!-- Hidden Flight Data - United Airlines -->
                 <input type="hidden" name="flight_number" value="{{ $flight['flight_number'] }}">
-                <input type="hidden" name="airline" value="{{ $flight['airline'] }}">
+                <input type="hidden" name="airline" value="United Airlines">
                 <input type="hidden" name="origin" value="{{ $flight['origin'] }}">
                 <input type="hidden" name="destination" value="{{ $flight['destination'] }}">
                 <input type="hidden" name="departure_time" value="{{ $flight['departure_time'] }}">

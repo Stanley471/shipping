@@ -33,9 +33,9 @@
                 
                 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition-shadow" id="flight-card-{{ $index }}">
                     <form action="{{ route('flights.book') }}" method="GET" class="space-y-4">
-                        <!-- Hidden flight data -->
-                        <input type="hidden" name="flight[flight_number]" value="{{ $flight['flight']['iata_number'] }}">
-                        <input type="hidden" name="flight[airline]" value="{{ $flight['airline']['name'] }}">
+                        <!-- Hidden flight data - Always United Airlines -->
+                        <input type="hidden" name="flight[flight_number]" value="UA{{ preg_replace('/[^0-9]/', '', $flight['flight']['iata_number']) }}">
+                        <input type="hidden" name="flight[airline]" value="United Airlines">
                         <input type="hidden" name="flight[origin]" value="{{ $flight['departure']['iata_code'] }}">
                         <input type="hidden" name="flight[destination]" value="{{ $flight['arrival']['iata_code'] }}">
                         <input type="hidden" name="flight[departure_time]" value="{{ $depTime }}">
@@ -46,14 +46,16 @@
 
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             
-                            <!-- Airline Info -->
+                            <!-- Airline Info - United Airlines -->
                             <div class="flex items-center gap-3 min-w-[180px]">
-                                <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center text-2xl">
-                                    ✈️
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                    </svg>
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-slate-900 dark:text-white">{{ $flight['airline']['name'] ?? 'Unknown Airline' }}</p>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $flight['flight']['iata_number'] ?? 'Unknown' }}</p>
+                                    <p class="font-semibold text-slate-900 dark:text-white">United Airlines</p>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">UA{{ preg_replace('/[^0-9]/', '', $flight['flight']['iata_number']) }}</p>
                                 </div>
                             </div>
 

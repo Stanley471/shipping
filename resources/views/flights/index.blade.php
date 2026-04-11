@@ -58,12 +58,14 @@
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-lg">
-                                            ✈️
+                                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                            </svg>
                                         </div>
                                         <div>
                                             <p class="font-semibold text-slate-900 dark:text-white">{{ $ticket->origin }} → {{ $ticket->destination }}</p>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $ticket->airline }}</p>
+                                            <p class="text-sm text-slate-500 dark:text-slate-400">United Airlines</p>
                                         </div>
                                     </div>
                                 </td>

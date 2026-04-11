@@ -15,11 +15,11 @@
     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mb-8">
         
         <!-- Header -->
-        <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-xl font-bold text-white">Boarding Pass</h1>
-                    <p class="text-emerald-100 text-sm">{{ $flightTicket->airline }}</p>
+                    <p class="text-blue-100 text-sm">United Airlines</p>
                 </div>
                 <div class="text-right">
                     <p class="text-2xl font-bold text-white">{{ $flightTicket->booking_reference }}</p>

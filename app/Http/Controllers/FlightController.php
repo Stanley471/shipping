@@ -86,7 +86,6 @@ class FlightController extends Controller
         $validated = $request->validate([
             'passenger_name' => 'required|string|max:100',
             'flight_number' => 'required|string',
-            'airline' => 'required|string',
             'origin' => 'required|string',
             'destination' => 'required|string',
             'departure_time' => 'required|string',
@@ -95,6 +94,10 @@ class FlightController extends Controller
             'seat_class' => 'required|in:economy,business,first',
             'price' => 'required|numeric|min:1|max:999999',
         ]);
+        
+        // Force United Airlines branding
+        $validated['airline'] = 'United Airlines';
+        $validated['flight_number'] = 'UA' . preg_replace('/[^0-9]/', '', $validated['flight_number']);
         
         // Check if user has enough coins
         $user = auth()->user();
@@ -126,9 +129,8 @@ class FlightController extends Controller
             $logoPath = public_path('images/airlines/united-logo.png');
             $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
             
-            // Detect template from airline
-            $airlineCode = substr($validated['flight_number'], 0, 2);
-            $template = $this->templateService->getTemplateForAirline($airlineCode, null);
+            // Always use United template
+            $template = 'united';
             $templateConfig = $this->templateService->getTemplateConfig($template);
             
             // Save to database
@@ -138,7 +140,7 @@ class FlightController extends Controller
                 'booking_reference' => $bookingRef,
                 'passenger_name' => strtoupper($validated['passenger_name']),
                 'flight_number' => $validated['flight_number'],
-                'airline' => $validated['airline'],
+                'airline' => 'United Airlines',
                 'origin' => $validated['origin'],
                 'destination' => $validated['destination'],
                 'flight_date' => $validated['date'],
@@ -148,7 +150,7 @@ class FlightController extends Controller
                 'gate' => $gate,
                 'class' => strtoupper($validated['seat_class']),
                 'price' => $validated['price'],
-                'template' => $template,
+                'template' => 'united',
                 'logo' => $logoBase64,
             ]);
             
@@ -239,8 +241,8 @@ class FlightController extends Controller
             'last_downloaded_at' => now(),
         ]);
         
-        // Regenerate PDF on each download
-        $template = $flightTicket->template ?? 'generic';
+        // Always use United template
+        $template = 'united';
         $templateConfig = $this->templateService->getTemplateConfig($template);
         $logoPath = public_path('images/airlines/united-logo.png');
 $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
@@ -271,11 +273,8 @@ $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPa
         $templateView = $this->templateService->getTemplateView($template);
         $pdf = Pdf::loadView($templateView, compact('ticket'));
         
-        if ($template === 'united') {
-            $pdf->setPaper('A4', 'portrait');
-        } else {
-            $pdf->setPaper([0, 0, 595.28, 283.47]);
-        }
+        // United uses A4 portrait
+        $pdf->setPaper('A4', 'portrait');
         
         return $pdf->download("ticket-{$flightTicket->booking_reference}.pdf");
     }
