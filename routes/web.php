@@ -11,6 +11,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\Admin\CoinAdminController;
 use App\Http\Controllers\Admin\ReferralAdminController;
+use App\Http\Controllers\ToolsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -123,6 +124,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/flights/ticket/{flightTicket}/download', [FlightController::class, 'download'])->name('flights.download');
     Route::delete('/flights/ticket/{flightTicket}', [FlightController::class, 'destroy'])->name('flights.destroy');
     Route::get('/api/airports', [FlightController::class, 'autocompleteAirports'])->name('api.airports');
+
+    // Upcoming Tools Routes (Coming Soon)
+    Route::get('/tools/passport', [ToolsController::class, 'passport'])->name('tools.passport');
+    Route::get('/tools/id-card', [ToolsController::class, 'idCard'])->name('tools.id-card');
+    Route::get('/tools/receipts', [ToolsController::class, 'receipts'])->name('tools.receipts');
 
     // Coin Routes
     Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');

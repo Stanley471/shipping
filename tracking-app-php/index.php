@@ -147,6 +147,65 @@ $recentSearches = getRecentSearches();
                     <p class="text-xs text-slate-600 dark:text-slate-400">Mobile Friendly</p>
                 </div>
             </div>
+
+            <!-- How It Works -->
+            <div class="mt-12 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white text-center mb-8">How It Works</h2>
+                <div class="space-y-6">
+                    <!-- Step 1 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                                <span class="text-emerald-600 dark:text-emerald-400 font-bold">1</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-900 dark:text-white mb-1">Enter Your Tracking ID</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Type in the tracking number provided when your shipment was booked. This is usually found in your confirmation email or receipt.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                                <span class="text-emerald-600 dark:text-emerald-400 font-bold">2</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-900 dark:text-white mb-1">Click Track Shipment</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Press the "Track Shipment" button to search our database for your package's current status and location.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                                <span class="text-emerald-600 dark:text-emerald-400 font-bold">3</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-900 dark:text-white mb-1">View Your Results</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">See real-time updates on your shipment's journey including current location, status updates, and estimated delivery time.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tips -->
+                <div class="mt-8 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-amber-900 dark:text-amber-200">Tracking Tips</p>
+                            <ul class="mt-1 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+                                <li>• Tracking IDs are typically 5-20 characters (letters and numbers only)</li>
+                                <li>• Recent searches are saved for quick access</li>
+                                <li>• Updates may take a few hours to appear after pickup</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
