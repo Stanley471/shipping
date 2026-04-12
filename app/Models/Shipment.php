@@ -26,6 +26,8 @@ class Shipment extends Model
         'courier',
         'quantity',
         'is_fragile',
+        'chat_provider',
+        'chat_widget_code',
     ];
 
     protected $casts = [

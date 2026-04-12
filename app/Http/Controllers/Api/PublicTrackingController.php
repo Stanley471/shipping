@@ -73,6 +73,7 @@ class PublicTrackingController extends Controller
             'estimated_delivery' => $shipment->eta?->toIso8601String(),
             'courier' => $shipment->courier,
             'timeline' => $this->formatTimeline($shipment),
+            'chat' => $this->formatChatWidget($shipment),
         ]);
     }
 
@@ -195,6 +196,24 @@ class PublicTrackingController extends Controller
                 'timestamp' => $update->occurred_at?->toIso8601String(),
             ];
         })->toArray();
+    }
+
+    /**
+     * Format chat widget information for public display
+     * 
+     * @param Shipment $shipment
+     * @return array|null
+     */
+    private function formatChatWidget(Shipment $shipment): ?array
+    {
+        if (empty($shipment->chat_provider) || empty($shipment->chat_widget_code)) {
+            return null;
+        }
+
+        return [
+            'provider' => $shipment->chat_provider,
+            'widget_code' => $shipment->chat_widget_code,
+        ];
     }
 
     /**

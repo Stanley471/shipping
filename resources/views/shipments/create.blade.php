@@ -12,7 +12,7 @@
         <!-- Coin Cost Notice -->
         @php
             $createCost = app(\App\Services\CoinService::class)->getServiceCost('create_shipment');
-            $userBalance = auth()->user()->coinBalance();
+            $userBalance = auth()->user()->getCoinBalance();
         @endphp
         
         <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4 flex items-center justify-between">
@@ -247,6 +247,63 @@
                 </div>
             </label>
         </div>
+
+        <!-- Chat Widget Section -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Customer Chat Support</h3>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Chat Provider -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Chat Provider</label>
+                    <select name="chat_provider" id="chat_provider" class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-purple-500 focus:ring-purple-500">
+                        <option value="">No chat support</option>
+                        <option value="whatsapp" {{ old('chat_provider') == 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
+                        <option value="smartsupp" {{ old('chat_provider') == 'smartsupp' ? 'selected' : '' }}>SmartSupp</option>
+                    </select>
+                    @error('chat_provider')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Chat Widget Code -->
+                <div id="chat_code_container" class="{{ old('chat_provider') ? '' : 'hidden' }}">
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Embed Code
+                        <span class="text-xs text-slate-500 font-normal ml-1">(Paste your widget code here)</span>
+                    </label>
+                    <textarea name="chat_widget_code" id="chat_widget_code" rows="4" placeholder="<!-- Paste your WhatsApp or SmartSupp embed code here -->"
+                        class="form-input w-full rounded-xl border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:border-purple-500 focus:ring-purple-500 font-mono text-xs">{{ old('chat_widget_code') }}</textarea>
+                    @error('chat_widget_code')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                    
+                    <!-- Help Text -->
+                    <div class="mt-3 p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                        <p class="text-xs text-purple-800 dark:text-purple-300 font-medium mb-1">How to get your embed code:</p>
+                        <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4 list-disc">
+                            <li><strong>WhatsApp:</strong> Go to <a href="https://business.whatsapp.com/products/whatsapp-business-api" target="_blank" class="underline">WhatsApp Business API</a> or use a widget generator like <a href="https://elfsight.com/whatsapp-chat-widget/" target="_blank" class="underline">Elfsight</a></li>
+                            <li><strong>SmartSupp:</strong> Sign up at <a href="https://www.smartsupp.com/" target="_blank" class="underline">smartsupp.com</a> → Install → Copy the embed code</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('chat_provider').addEventListener('change', function() {
+                const container = document.getElementById('chat_code_container');
+                if (this.value) {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                    document.getElementById('chat_widget_code').value = '';
+                }
+            });
+        </script>
 
         <!-- Submit Buttons -->
         <div class="flex flex-col sm:flex-row gap-4">

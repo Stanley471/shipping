@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ShipmentCreated;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
+use App\Rules\ValidChatWidget;
 use App\Services\CoinService;
 use App\Services\TrackingIdGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -58,6 +59,8 @@ class ShipmentController extends Controller
             'courier' => 'nullable|string|max:255',
             'quantity' => 'nullable|integer|min:1',
             'is_fragile' => 'nullable|boolean',
+            'chat_provider' => 'nullable|string|in:whatsapp,smartsupp',
+            'chat_widget_code' => ['nullable', 'string', new ValidChatWidget($request->input('chat_provider'))],
         ]);
 
         $shipment = Shipment::create([
@@ -74,6 +77,8 @@ class ShipmentController extends Controller
             'courier' => $validated['courier'] ?? null,
             'quantity' => $validated['quantity'] ?? null,
             'is_fragile' => $validated['is_fragile'] ?? false,
+            'chat_provider' => $validated['chat_provider'] ?? null,
+            'chat_widget_code' => $validated['chat_widget_code'] ?? null,
         ]);
 
         TrackingUpdate::create([

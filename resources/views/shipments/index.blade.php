@@ -9,7 +9,7 @@
     <!-- Coin Balance Bar -->
     @php
         $createCost = app(\App\Services\CoinService::class)->getServiceCost('create_shipment');
-        $userBalance = auth()->user()->coinBalance();
+        $userBalance = auth()->user()->getCoinBalance();
     @endphp
     
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm">
