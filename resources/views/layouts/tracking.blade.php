@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', config('app.name', 'Cargo Shippings'))</title>
+    <title>@yield('title', config('app.name', 'Ctools'))</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         (function() {
@@ -29,7 +29,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-slate-900 dark:text-white">Cargo Shippings</span>
+                    <span class="text-xl font-bold text-slate-900 dark:text-white">Ctools</span>
                 </div>
 
                 <!-- Dark Mode Toggle -->

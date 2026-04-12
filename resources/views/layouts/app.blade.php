@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name', 'Cargo Shippings'))</title>
+    <title>@yield('title', config('app.name', 'Ctools'))</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         (function() {
@@ -31,7 +31,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="text-lg font-bold text-slate-900 dark:text-white block leading-tight">Cargo Shippings</span>
+                        <span class="text-lg font-bold text-slate-900 dark:text-white block leading-tight">Ctools</span>
                         <span class="text-xs text-slate-500 dark:text-slate-400">Shipping Made Easy</span>
                     </div>
                 </a>

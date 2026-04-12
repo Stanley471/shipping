@@ -27,7 +27,7 @@
     @endphp
     
     <div class="header">
-        <div class="logo">Cargo Shippings</div>
+        <div class="logo">Ctools</div>
         <div class="tracking-id">Tracking ID: {{ $shipment->tracking_id }}</div>
     </div>
     
@@ -118,7 +118,7 @@
     @endif
     
     <div class="footer">
-        <p>Generated on {{ now()->format('F d, Y') }} | Cargo Shippings</p>
+        <p>Generated on {{ now()->format('F d, Y') }} | Ctools</p>
     </div>
 </body>
 </html>

@@ -11,7 +11,7 @@ define('API_BASE_URL', 'http://localhost/shipping/public/api/public');
 // define('API_BASE_URL', 'http://localhost:8000/api/public');
 
 // App name
-define('APP_NAME', 'Cargo Tracking');
+define('APP_NAME', 'Cargo Shippings');
 
 // Cache directory (must be writable)
 define('CACHE_DIR', __DIR__ . '/cache');
