@@ -14,6 +14,18 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Telegram Channel URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used for the Telegram channel join links throughout
+    | the application.
+    |
+    */
+    
+    'telegram_channel_url' => env('TELEGRAM_CHANNEL_URL', 'https://t.me/your_channel_link'),
 
     /*
     |--------------------------------------------------------------------------

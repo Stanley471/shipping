@@ -208,4 +208,101 @@
         </div>
     </div>
 </div>
+
+<!-- Telegram Channel Popup -->
+<div id="telegramPopup" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeTelegramPopup()"></div>
+    
+    <!-- Modal Panel -->
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-200 dark:border-slate-700">
+                <!-- Header with Telegram Color -->
+                <div class="bg-gradient-to-r from-sky-500 to-sky-600 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            <h3 class="text-lg font-bold text-white" id="modal-title">Join Our Telegram!</h3>
+                        </div>
+                        <button onclick="closeTelegramPopup()" class="text-white/80 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Body -->
+                <div class="px-6 py-6">
+                    <div class="text-center">
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/30 mb-4">
+                            <svg class="h-8 w-8 text-sky-600 dark:text-sky-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                        </div>
+                        
+                        <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                            Stay Updated!
+                        </h4>
+                        <p class="text-slate-500 dark:text-slate-400 mb-6">
+                            Join our Telegram channel for exclusive updates, tips, and announcements about Ctools.
+                        </p>
+                        
+                        <!-- Join Button -->
+                        <a href="{{ config('app.telegram_channel_url') }}" target="_blank" onclick="joinTelegram()" 
+                           class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sky-500 px-6 py-3.5 text-white font-semibold shadow-lg shadow-sky-500/30 hover:bg-sky-600 hover:shadow-sky-600/40 transition-all">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            Join Telegram Channel
+                        </a>
+                        
+                        <!-- Dismiss Button -->
+                        <button onclick="dismissTelegramPopup()" class="mt-4 text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                            Maybe later
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="bg-slate-50 dark:bg-slate-700/50 px-6 py-4">
+                    <p class="text-xs text-center text-slate-500 dark:text-slate-400">
+                        Get real-time notifications and connect with our community
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Check if popup should be shown
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user has dismissed the popup
+        if (!localStorage.getItem('telegramPopupDismissed')) {
+            // Show popup after a short delay
+            setTimeout(function() {
+                document.getElementById('telegramPopup').classList.remove('hidden');
+            }, 1000);
+        }
+    });
+    
+    function closeTelegramPopup() {
+        document.getElementById('telegramPopup').classList.add('hidden');
+    }
+    
+    function dismissTelegramPopup() {
+        localStorage.setItem('telegramPopupDismissed', 'true');
+        closeTelegramPopup();
+    }
+    
+    function joinTelegram() {
+        // Mark as joined/dismissed so it doesn't show again
+        localStorage.setItem('telegramPopupDismissed', 'true');
+        // Let the link open naturally
+    }
+</script>
 @endsection
