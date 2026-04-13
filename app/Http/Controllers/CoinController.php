@@ -70,24 +70,18 @@ class CoinController extends Controller
         $validated = $request->validate([
             'amount' => 'required|integer|min:100|max:100000', // Min 100 Naira, Max 100k
             'bank_account_id' => 'required|exists:admin_bank_accounts,id',
-            'proof_image' => 'required|image|max:5120', // Max 5MB
         ]);
 
         $user = auth()->user();
-
-        // Store proof image
-        $proofPath = $request->file('proof_image')->store('payment_proofs', 'public');
 
         // Create purchase request
         $purchase = $this->coinService->createPurchaseRequest(
             $user,
             $validated['amount'],
-            $validated['bank_account_id'],
-            $proofPath
+            $validated['bank_account_id']
         );
 
         if (!$purchase) {
-            Storage::disk('public')->delete($proofPath);
             return back()->with('error', 'Invalid bank account selected.');
         }
 
@@ -95,7 +89,7 @@ class CoinController extends Controller
         $this->notifyAdminsOfDeposit($purchase);
 
         return redirect()->route('coins.index')
-            ->with('success', 'Payment submitted successfully! Your coins will be credited after admin verification.');
+            ->with('success', 'Payment request submitted successfully! Your coins will be credited after admin verification.');
     }
 
     /**

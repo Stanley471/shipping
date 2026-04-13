@@ -13,7 +13,7 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('coins.buy') }}" enctype="multipart/form-data" class="p-6 space-y-6">
+                <form method="POST" action="{{ route('coins.buy') }}" class="p-6 space-y-6">
                     @csrf
 
                     {{-- Amount --}}
@@ -42,9 +42,14 @@
                                     <span class="flex flex-col">
                                         <span class="block text-sm font-medium text-gray-900 dark:text-gray-100">{{ $account->bank_name }}</span>
                                         <span class="mt-1 flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $account->account_number }}
-                                            <button type="button" onclick="copyToClipboard('{{ $account->account_number }}')" 
-                                                class="ml-2 text-indigo-600 hover:text-indigo-500 text-xs">Copy</button>
+                                            <span class="font-bold text-gray-900 dark:text-gray-200 tracking-wide">{{ $account->account_number }}</span>
+                                            <button type="button" onclick="copyToClipboard(this, '{{ $account->account_number }}')" 
+                                                class="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 hover:bg-indigo-200 dark:hover:bg-indigo-800 text-indigo-700 dark:text-indigo-300 rounded text-xs font-medium transition-colors">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                                </svg>
+                                                Copy
+                                            </button>
                                         </span>
                                         <span class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $account->account_name }}</span>
                                     </span>
@@ -57,34 +62,18 @@
                         @enderror
                     </div>
 
-                    {{-- Proof Upload --}}
-                    <div>
-                        <label for="proof_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Proof (Screenshot)</label>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Upload screenshot of successful transfer. Max 5MB.</p>
-                        <input type="file" id="proof_image" name="proof_image" accept="image/*" 
-                            class="block w-full text-sm text-gray-900 dark:text-gray-300
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-md file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-indigo-50 file:text-indigo-700
-                                hover:file:bg-indigo-100
-                                dark:file:bg-indigo-900 dark:file:text-indigo-300" 
-                            required />
-                        @error('proof_image')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     {{-- Instructions --}}
-                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">How it works:</h4>
-                        <ol class="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
+                    <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-emerald-900 dark:text-emerald-100 mb-2">Payment Instructions</h4>
+                        <ol class="text-sm text-emerald-800 dark:text-emerald-200 space-y-1 list-decimal list-inside">
                             <li>Enter the amount of coins you want to buy</li>
                             <li>Select a bank account and send the exact amount</li>
-                            <li>Take a screenshot of the successful transfer</li>
-                            <li>Upload the screenshot and submit</li>
-                            <li>Admin will verify and credit your account</li>
+                            <li><strong>Important:</strong> Include your account email <code class="bg-white dark:bg-slate-700 px-1 py-0.5 rounded">{{ auth()->user()->email }}</code> in the transaction remark/reference</li>
+                            <li>Click "I Have Made Payment"</li>
                         </ol>
+                        <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-2">
+                            Adding your email in the remark helps us verify your payment quickly.
+                        </p>
                     </div>
 
                     <div class="flex items-center justify-end">
@@ -98,10 +87,33 @@
     </div>
 
     <script>
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Account number copied: ' + text);
-            });
+        function copyToClipboard(btn, text) {
+            // Fallback copy method for broader compatibility
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {}
+            document.body.removeChild(textArea);
+
+            // Also try modern API
+            if (!success && navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            }
+
+            // Visual feedback
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Copied</span>';
+            btn.className = 'ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-green-600 text-white rounded text-xs font-medium transition-colors';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.className = 'ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 hover:bg-indigo-200 dark:hover:bg-indigo-800 text-indigo-700 dark:text-indigo-300 rounded text-xs font-medium transition-colors';
+            }, 2000);
         }
 
         // Update Naira display when amount changes

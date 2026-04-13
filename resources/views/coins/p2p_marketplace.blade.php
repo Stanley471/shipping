@@ -159,7 +159,7 @@
             </div>
 
             {{-- Modal Body --}}
-            <form id="buy-form" method="POST" action="{{ route('coins.buy') }}" enctype="multipart/form-data" class="p-6 space-y-6">
+            <form id="buy-form" method="POST" action="{{ route('coins.buy') }}" class="p-6 space-y-6">
                 @csrf
                 <input type="hidden" name="bank_account_id" id="modal-vendor-id">
 
@@ -227,8 +227,21 @@
                     </h4>
                     <div class="space-y-1 text-sm">
                         <p class="text-blue-800 dark:text-blue-200"><span class="font-medium">Bank:</span> <span id="modal-bank"></span></p>
-                        <p class="text-blue-800 dark:text-blue-200"><span class="font-medium">Account Number:</span> <span id="modal-account"></span></p>
+                        <p class="text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                            <span class="font-medium">Account Number:</span>
+                            <span id="modal-account" class="font-bold text-base tracking-wide"></span>
+                            <button type="button" id="copy-btn" onclick="copyText('modal-account', 'copy-btn')" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-200 dark:bg-blue-800 hover:bg-blue-300 dark:hover:bg-blue-700 text-blue-800 dark:text-blue-200 rounded text-xs font-medium transition-colors">
+                                Copy
+                            </button>
+                        </p>
                         <p class="text-blue-800 dark:text-blue-200"><span class="font-medium">Account Name:</span> <span id="modal-account-name"></span></p>
+                        <p class="text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                            <span class="font-medium">Transaction Remark:</span>
+                            <span id="modal-remark" class="font-bold text-base tracking-wide">{{ auth()->user()->email }}</span>
+                            <button type="button" id="copy-remark-btn" onclick="copyText('modal-remark', 'copy-remark-btn')" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-200 dark:bg-blue-800 hover:bg-blue-300 dark:hover:bg-blue-700 text-blue-800 dark:text-blue-200 rounded text-xs font-medium transition-colors">
+                                Copy
+                            </button>
+                        </p>
                     </div>
                 </div>
 
@@ -243,23 +256,12 @@
                     <h4 class="font-medium text-emerald-900 dark:text-emerald-100 mb-2">Payment Instructions</h4>
                     <ol class="text-sm text-emerald-800 dark:text-emerald-200 space-y-1 list-decimal list-inside">
                         <li>Transfer the exact amount to the vendor's account</li>
-                        <li>Take a screenshot of the payment receipt</li>
-                        <li>Upload the screenshot below</li>
+                        <li><strong>Important:</strong> Include your account email <code class="bg-white dark:bg-slate-700 px-1 py-0.5 rounded">{{ auth()->user()->email }}</code> in the transaction remark/reference</li>
                         <li>Click "I Have Made Payment"</li>
                     </ol>
-                </div>
-
-                {{-- Proof Upload --}}
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Payment Proof (Screenshot)</label>
-                    <input type="file" name="proof_image" accept="image/*" required
-                        class="block w-full text-sm text-slate-900 dark:text-white
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-lg file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-emerald-50 file:text-emerald-700
-                            hover:file:bg-emerald-100
-                            dark:file:bg-emerald-900/30 dark:file:text-emerald-300">
+                    <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-2">
+                        Adding your email in the remark helps the vendor verify your payment quickly.
+                    </p>
                 </div>
 
                 {{-- Disclaimer --}}
@@ -330,6 +332,32 @@
     }
 
     document.getElementById('amount-input').addEventListener('input', updateSummary);
+
+    function copyText(textElementId, btnElementId) {
+        const text = document.getElementById(textElementId).textContent.trim();
+        if (!text) return;
+
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, 99999);
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+
+        const btn = document.getElementById(btnElementId);
+        if (btn) {
+            btn.textContent = 'Copied';
+            btn.className = 'inline-flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded text-xs font-medium transition-colors';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.className = 'inline-flex items-center gap-1 px-2 py-1 bg-blue-200 dark:bg-blue-800 hover:bg-blue-300 dark:hover:bg-blue-700 text-blue-800 dark:text-blue-200 rounded text-xs font-medium transition-colors';
+            }, 2000);
+        }
+    }
 
     // Close modal on escape key
     document.addEventListener('keydown', function(e) {

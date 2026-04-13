@@ -30,11 +30,11 @@
                         <h3 class="font-semibold text-slate-900 dark:text-white">{{ number_format($order->amount_coins) }} Coins</h3>
                         <p class="text-sm text-slate-500 dark:text-slate-400">Buyer: {{ $order->user->name }}</p>
                         <p class="text-xs text-slate-400 mt-1">{{ $order->created_at->format('M d, Y H:i') }}</p>
-                        @if($order->proof_image)
-                        <a href="{{ Storage::url($order->proof_image) }}" target="_blank" class="text-sm text-emerald-600 hover:text-emerald-700 mt-2 inline-block">
-                            View Payment Proof →
-                        </a>
-                        @endif
+                        <div class="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <p class="text-xs text-blue-700 dark:text-blue-300">
+                                <span class="font-medium">Verify:</span> Check for buyer's email <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded">{{ $order->user->email }}</code> in the transaction remark
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">

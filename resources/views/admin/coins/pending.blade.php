@@ -20,7 +20,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Amount</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Bank Details</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Proof</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Verify By</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Actions</th>
                             </tr>
                         </thead>
@@ -45,14 +45,10 @@
                                     <div class="text-gray-500 text-xs">{{ $purchase->account_name }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($purchase->proof_image)
-                                    <a href="{{ Storage::url($purchase->proof_image) }}" target="_blank" 
-                                       class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 text-sm">
-                                        View Proof
-                                    </a>
-                                    @else
-                                    <span class="text-gray-400 text-sm">No proof</span>
-                                    @endif
+                                    <p class="text-xs text-blue-700 dark:text-blue-300">
+                                        <span class="font-medium">Check remark for:</span><br>
+                                        <code class="font-mono bg-blue-100 dark:bg-slate-700 px-1 py-0.5 rounded">{{ $purchase->user->email }}</code>
+                                    </p>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex items-center justify-end space-x-2">

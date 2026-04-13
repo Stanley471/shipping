@@ -14,9 +14,7 @@
 | **Account** | {{ $purchase->account_number }} |
 | **Submitted** | {{ $purchase->created_at->format('M d, Y h:i A') }} |
 
-@if($purchase->proof_image)
-**Payment Proof:** Attached to this email
-@endif
+> **Verification:** Check the transaction remark/reference for the user's email address: `{{ $user->email }}`
 
 <x-mail::button :url="$adminUrl">
 Review Deposit

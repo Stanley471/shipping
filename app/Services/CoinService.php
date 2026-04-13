@@ -228,8 +228,7 @@ class CoinService
     public function createPurchaseRequest(
         User $user,
         int $amountCoins,
-        int $adminBankAccountId,
-        ?string $proofImagePath = null
+        int $adminBankAccountId
     ): ?CoinPurchase {
         $bankAccount = AdminBankAccount::find($adminBankAccountId);
         
@@ -244,7 +243,6 @@ class CoinService
             'bank_name' => $bankAccount->bank_name,
             'account_number' => $bankAccount->account_number,
             'account_name' => $bankAccount->account_name,
-            'proof_image' => $proofImagePath,
             'status' => CoinPurchase::STATUS_PENDING,
         ]);
     }

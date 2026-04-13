@@ -58,14 +58,6 @@ class AdminDepositNotification extends Mailable implements ShouldQueue
      */
     public function attachments(): array
     {
-        $attachments = [];
-        
-        // Attach payment proof if exists
-        if ($this->purchase->proof_image && \Storage::disk('public')->exists($this->purchase->proof_image)) {
-            $attachments[] = Attachment::fromStorageDisk('public', $this->purchase->proof_image)
-                ->as('payment_proof.' . pathinfo($this->purchase->proof_image, PATHINFO_EXTENSION));
-        }
-        
-        return $attachments;
+        return [];
     }
 }

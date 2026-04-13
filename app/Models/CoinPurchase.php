@@ -14,7 +14,6 @@ class CoinPurchase extends Model
         'bank_name',
         'account_number',
         'account_name',
-        'proof_image',
         'status',
         'admin_note',
         'processed_by',
