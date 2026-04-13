@@ -279,10 +279,14 @@
 </div>
 
 <script>
-    // Check if popup should be shown
+    // Check if popup should be shown (every 7 days)
     document.addEventListener('DOMContentLoaded', function() {
-        // Check if user has dismissed the popup
-        if (!localStorage.getItem('telegramPopupDismissed')) {
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+        const lastDismissed = localStorage.getItem('telegramPopupDismissedAt');
+        const now = Date.now();
+        
+        // Show if never dismissed OR if 7 days have passed since last dismissal
+        if (!lastDismissed || (now - parseInt(lastDismissed)) > SEVEN_DAYS) {
             // Show popup after a short delay
             setTimeout(function() {
                 document.getElementById('telegramPopup').classList.remove('hidden');
@@ -295,13 +299,14 @@
     }
     
     function dismissTelegramPopup() {
-        localStorage.setItem('telegramPopupDismissed', 'true');
+        // Store timestamp of dismissal
+        localStorage.setItem('telegramPopupDismissedAt', Date.now().toString());
         closeTelegramPopup();
     }
     
     function joinTelegram() {
-        // Mark as joined/dismissed so it doesn't show again
-        localStorage.setItem('telegramPopupDismissed', 'true');
+        // Mark as joined so it doesn't show again (or use a much longer period)
+        localStorage.setItem('telegramPopupDismissedAt', Date.now().toString());
         // Let the link open naturally
     }
 </script>
