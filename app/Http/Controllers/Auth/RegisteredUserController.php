@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Helpers\MailHelper;
+use App\Mail\AdminNewUserNotification;
 use App\Models\User;
 use App\Services\ReferralService;
 use Illuminate\Auth\Events\Registered;
@@ -58,8 +60,31 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // Notify admin of new registration
+        $this->notifyAdminOfNewUser($user);
+
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Send email notification to admin about new user registration
+     */
+    private function notifyAdminOfNewUser(User $user): void
+    {
+        // Get all admin users
+        $admins = User::where('role', 'admin')->orWhere('is_admin', true)->get();
+        
+        if ($admins->isEmpty()) {
+            return;
+        }
+
+        // Send to all admins
+        foreach ($admins as $admin) {
+            if ($admin->email) {
+                MailHelper::send($admin->email, new AdminNewUserNotification($user));
+            }
+        }
     }
 }

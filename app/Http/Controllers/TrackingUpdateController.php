@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailHelper;
 use App\Mail\TrackingUpdate as TrackingUpdateMail;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class TrackingUpdateController extends Controller
 {
@@ -37,11 +37,11 @@ class TrackingUpdateController extends Controller
         // Send email notification if requested
         if ($request->boolean('send_email')) {
             // Send to user who created the shipment
-            Mail::to(Auth::user()->email)->send(new TrackingUpdateMail($shipment, $update));
+            MailHelper::send(Auth::user()->email, new TrackingUpdateMail($shipment, $update));
             
             // Send to receiver if email provided
             if ($shipment->receiver_email) {
-                Mail::to($shipment->receiver_email)->send(new TrackingUpdateMail($shipment, $update));
+                MailHelper::send($shipment->receiver_email, new TrackingUpdateMail($shipment, $update));
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailHelper;
 use App\Mail\ShipmentCreated;
 use App\Models\Shipment;
 use App\Models\TrackingUpdate;
@@ -11,7 +12,6 @@ use App\Services\TrackingIdGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class ShipmentController extends Controller
 {
@@ -103,11 +103,11 @@ class ShipmentController extends Controller
         // Send email notifications if requested
         if ($request->boolean('send_email')) {
             // Send to user who created the shipment
-            Mail::to(Auth::user()->email)->send(new ShipmentCreated($shipment));
+            MailHelper::send(Auth::user()->email, new ShipmentCreated($shipment));
             
             // Send to receiver if email provided
             if ($shipment->receiver_email) {
-                Mail::to($shipment->receiver_email)->send(new ShipmentCreated($shipment));
+                MailHelper::send($shipment->receiver_email, new ShipmentCreated($shipment));
             }
         }
 

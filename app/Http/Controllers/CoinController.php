@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailHelper;
+use App\Mail\AdminDepositNotification;
 use App\Models\AdminBankAccount;
 use App\Models\CoinPurchase;
+use App\Models\User;
 use App\Services\CoinService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -88,8 +91,31 @@ class CoinController extends Controller
             return back()->with('error', 'Invalid bank account selected.');
         }
 
+        // Notify admins of new deposit
+        $this->notifyAdminsOfDeposit($purchase);
+
         return redirect()->route('coins.index')
             ->with('success', 'Payment submitted successfully! Your coins will be credited after admin verification.');
+    }
+
+    /**
+     * Send email notification to admins about new deposit
+     */
+    private function notifyAdminsOfDeposit(CoinPurchase $purchase): void
+    {
+        // Get all admin users
+        $admins = User::where('role', 'admin')->orWhere('is_admin', true)->get();
+        
+        if ($admins->isEmpty()) {
+            return;
+        }
+
+        // Send to all admins
+        foreach ($admins as $admin) {
+            if ($admin->email) {
+                MailHelper::send($admin->email, new AdminDepositNotification($purchase));
+            }
+        }
     }
 
     /**

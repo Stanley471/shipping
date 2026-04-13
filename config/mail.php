@@ -115,4 +115,20 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mail Queue Mode
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether emails are sent synchronously (immediately)
+    | or asynchronously via queue. When set to 'queue', you must run the
+    | queue worker (php artisan queue:work). When set to 'sync', emails
+    | are sent immediately without requiring a queue worker.
+    |
+    | Supported: "sync", "queue"
+    |
+    */
+
+    'send_mode' => env('MAIL_SEND_MODE', 'sync'),
+
 ];
