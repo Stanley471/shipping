@@ -13,6 +13,49 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
+    
+    <!-- CSRF Token Refresh - Prevents 419 errors -->
+    <script>
+        // Refresh CSRF token every 10 minutes to prevent expiration
+        setInterval(function() {
+            fetch('/csrf-token')
+                .then(response => {
+                    if (response.status === 419) {
+                        // Session expired, reload page to get new token
+                        window.location.reload();
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.token) {
+                        document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.token);
+                        // Also update Axios headers if available
+                        if (window.axios) {
+                            window.axios.defaults.headers.common['X-CSRF-TOKEN'] = data.token;
+                        }
+                        // Update any forms on the page
+                        document.querySelectorAll('input[name="_token"]').forEach(function(input) {
+                            input.value = data.token;
+                        });
+                    }
+                })
+                .catch(() => {
+                    // Silent fail - token will be refreshed on next page load
+                });
+        }, 600000); // 10 minutes
+        
+        // Intercept form submissions to check for 419 errors
+        document.addEventListener('submit', function(e) {
+            var form = e.target;
+            // Ensure the form has the latest CSRF token
+            var tokenInput = form.querySelector('input[name="_token"]');
+            var metaToken = document.querySelector('meta[name="csrf-token"]');
+            if (tokenInput && metaToken) {
+                tokenInput.value = metaToken.getAttribute('content');
+            }
+        });
+    </script>
 </head>
 <body class="font-sans text-gray-900 antialiased">
     

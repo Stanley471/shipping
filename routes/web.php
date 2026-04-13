@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// CSRF Token refresh endpoint - prevents 419 errors
+Route::get('/csrf-token', function () {
+    return response()->json(['token' => csrf_token()]);
+})->middleware('web');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
