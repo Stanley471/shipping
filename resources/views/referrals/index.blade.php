@@ -172,28 +172,65 @@
                 @if($transactions->count() > 0)
                     <div class="space-y-3">
                         @foreach($transactions->take(5) as $tx)
-                        <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full flex items-center justify-center
-                                    {{ $tx->amount > 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600' }}">
-                                    @if($tx->amount > 0)
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                        </svg>
-                                    @else
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                                        </svg>
-                                    @endif
+                        <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center
+                                        {{ $tx->amount > 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600' }}">
+                                        @if($tx->amount > 0)
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-900 dark:text-white">{{ $tx->typeLabel() }}</p>
+                                        <p class="text-xs text-slate-500">{{ $tx->created_at->format('M d, Y') }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-medium text-slate-900 dark:text-white">{{ $tx->typeLabel() }}</p>
-                                    <p class="text-xs text-slate-500">{{ $tx->created_at->format('M d, Y') }}</p>
-                                </div>
+                                <span class="font-semibold {{ $tx->amount > 0 ? 'text-emerald-600' : 'text-amber-600' }}">
+                                    {{ $tx->amount > 0 ? '+' : '' }}{{ number_format($tx->amount) }}
+                                </span>
                             </div>
-                            <span class="font-semibold {{ $tx->amount > 0 ? 'text-emerald-600' : 'text-amber-600' }}">
-                                {{ $tx->amount > 0 ? '+' : '' }}{{ number_format($tx->amount) }}
-                            </span>
+                            
+                            <!-- Status Badge -->
+                            @if($tx->status)
+                            <div class="mt-2 flex items-center gap-2">
+                                @if($tx->status === 'pending')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-400">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        PENDING
+                                    </span>
+                                @elseif($tx->status === 'completed')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-400">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        APPROVED
+                                    </span>
+                                @elseif($tx->status === 'rejected')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-400">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        REJECTED
+                                    </span>
+                                @endif
+                            </div>
+                            @endif
+                            
+                            <!-- Rejection Reason -->
+                            @if($tx->status === 'rejected' && $tx->description)
+                                <p class="mt-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                                    <span class="font-medium">Reason:</span> {{ $tx->description }}
+                                </p>
+                            @endif
                         </div>
                         @endforeach
                     </div>
